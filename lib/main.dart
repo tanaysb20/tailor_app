@@ -7,7 +7,6 @@ import 'package:provider/provider.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tailor_app/Providers/home_provider.dart';
-import 'package:tailor_app/Reusable%20components/text_field.dart';
 import 'package:tailor_app/Screens/Auth%20screen/phone_screen.dart';
 import 'package:tailor_app/Screens/landing_screen.dart';
 import 'Providers/auth_provider.dart';
