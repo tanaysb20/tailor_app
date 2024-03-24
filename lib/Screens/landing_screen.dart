@@ -68,12 +68,17 @@ class _OtpScreenState extends State<LandingScreen>
         titleSpacing: 20.w,
         centerTitle: false,
         title: currentIndexx == 0
-            ? Text("Tailor App",  style: TextStyle(
-                  fontSize: 26.sp,
+            ?  Row(
+              children: [
+                SvgPicture.asset("assets/logohome.svg",height: 35.h,fit: BoxFit.cover),
+                SizedBox(width: 8.w),
+                Text("Tailor App",  style: TextStyle(
+                  fontSize: 28.sp,
                   color: const Color(0xffFF7126),
                   fontWeight: FontWeight.w500,
                 ),)
-            // Image.asset("assets/fabicon.png", height: 35.h)
+              ],
+            )
             : Text(
                currentIndexx == 1
                     ? "My Orders":
