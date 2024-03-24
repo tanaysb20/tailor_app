@@ -5,7 +5,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tailor_app/Screens/Home%20screen/home_screen.dart';
 import 'package:tailor_app/Screens/My%20customer/customer_screen.dart';
-import 'package:tailor_app/Screens/My%20relatives/relatives_screen.dart';
+import 'package:tailor_app/Screens/My%20Orders/orders_screen.dart';
 import 'package:tailor_app/main.dart';
 
 class LandingScreen extends StatefulWidget {

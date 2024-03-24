@@ -49,13 +49,13 @@ class _OtpScreenState extends State<HomeScreen>
                 children: [
                   SizedBox(height: 25.h),
                   Container(
-                    margin: EdgeInsets.symmetric(horizontal: 6.w),
+                    margin: EdgeInsets.symmetric(horizontal: 8.w),
                     child: Row(
                       children: [
                         Expanded(
                             child: customBox(
                                 Color(0xff5F67EC), "100", "Total Orders","box1")),
-                                SizedBox(width: 10.w),
+                                SizedBox(width: 18.w),
                         Expanded(
                             child: customBox(
                                 Color(0xffF77163), "30", "Active Orders","box2")),
@@ -64,13 +64,13 @@ class _OtpScreenState extends State<HomeScreen>
                   ),
                   SizedBox(height: 20.h),
                   Container(
-                    margin: EdgeInsets.symmetric(horizontal: 6.w),
+                    margin: EdgeInsets.symmetric(horizontal: 8.w),
                     child: Row(
                       children: [
                         Expanded(
                             child: customBox(
                                 Color(0xff1FB6F3), "70", "Delivered Orders","box3")),
-                                SizedBox(width: 10.w),
+                                SizedBox(width: 18.w),
                         Expanded(
                             child: customBox(
                                 Color(0xffFF9056), "100", "Total Customers","box4")),
@@ -96,7 +96,7 @@ Widget customBox(Color txcolor, String text1, String text2,String image) {
     padding: EdgeInsets.only(top: 30.h, bottom: 30.h, left: 15.w),
     
     decoration:
-        BoxDecoration(borderRadius: BorderRadius.circular(12), color: txcolor),
+        BoxDecoration(borderRadius: BorderRadius.circular(8), color: txcolor),
     child: Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
