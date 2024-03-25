@@ -82,7 +82,7 @@ class _OtpScreenState extends State<HomeScreen>
                           margin: EdgeInsets.symmetric(horizontal: 8.w,vertical: 15.h),
                       alignment: Alignment.centerLeft,
                       child: Text("Current Order",  style: TextStyle(
-                                      fontSize: 26.sp,
+                                      fontSize: 24.sp,
                                       color:  Color(0xff101010),
                                       fontWeight: FontWeight.w600,
                                     ),),
@@ -140,14 +140,14 @@ Widget customBox(Color txcolor, String text1, String text2,String image) {
             SizedBox(width: 8.w),
             Text(
               text1,
-              style: textFieldStyle(color: Colors.white, fontSize: 25.sp),
+              style: textFieldStyle(color: Colors.white, fontSize: 22.sp),
             )
           ],
         ),
         SizedBox(height: 14.h),
         Text(
           text2,
-          style: textFieldStyle(color: Colors.white, fontSize: 20.sp),
+          style: textFieldStyle(color: Colors.white, fontSize: 18.sp),
         )
       ],
     ),

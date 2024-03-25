@@ -121,8 +121,8 @@ class CustomTextField extends StatelessWidget {
           
                 prefixIcon:
                     prefixIcon? Container(
-                      margin: EdgeInsets.only(left: 4.w,right: 4.w),
-                      child: Icon(Icons.search,color: Color(0xffFF9056),size: 32.sp)):null,
+                      margin: EdgeInsets.only(left: 6.w,right: 4.w),
+                      child: Icon(Icons.search,color: Color(0xffFF9056),size: 29.sp)):null,
                 prefixIconConstraints:
                     BoxConstraints(minWidth: 2, minHeight: 30.h),
                 floatingLabelBehavior: FloatingLabelBehavior.always,
@@ -141,7 +141,7 @@ class CustomTextField extends StatelessWidget {
                 hintText: hintText,
           
                 hintStyle:
-                    textFieldStyle(color: Colors.grey.shade900, fontSize: 22.sp),
+                    textFieldStyle(color: Colors.grey.shade900, fontSize: 16.sp),
               ),
               validator: validator,
               inputFormatters: inputFormatters,

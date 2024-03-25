@@ -73,7 +73,7 @@ class _OtpScreenState extends State<LandingScreen>
                 SvgPicture.asset("assets/logohome.svg",height: 35.h,fit: BoxFit.cover),
                 SizedBox(width: 8.w),
                 Text("Tailor App",  style: TextStyle(
-                  fontSize: 28.sp,
+                  fontSize: 24.sp,
                   color: const Color(0xffFF7126),
                   fontWeight: FontWeight.w500,
                 ),)
@@ -84,7 +84,7 @@ class _OtpScreenState extends State<LandingScreen>
                     ? "My Orders":
                  "My Customers",
                 style: TextStyle(
-                  fontSize: 26.sp,
+                  fontSize: 24.sp,
                   color: const Color(0xffFF7126),
                   fontWeight: FontWeight.w500,
                 ),

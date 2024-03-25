@@ -110,6 +110,7 @@ class _OtpScreenState extends State<CustomerScreen>
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 12.0.w),
                 child: CustomTextField(
+                  prefixIcon: true,
                     onChanged: (value) {
                       filterList(value);
                     },
@@ -146,17 +147,17 @@ Widget customListView(BuildContext context, RelationModal itemFile) {
         ListTile(
           leading: CircleAvatar(
               child: SvgPicture.asset("assets/pic.svg"),
-              radius: 30.sp),
+              radius: 26.sp),
           title: Text("${itemFile.name}",
               style: textFieldStyle(
-                  fontSize: 21.sp,
+                  fontSize: 19.sp,
                   color: const Color(0xff071245),
                   weight: FontWeight.w600)),
           subtitle: Container(
             margin: EdgeInsets.only(top: 6.h),
             child: Text("+91 ${itemFile.phonenos}",
                 style: textFieldStyle(
-                  fontSize: 18.sp,
+                  fontSize: 17.sp,
                   color: Colors.grey.shade600,
                 )),
           ),

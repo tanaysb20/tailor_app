@@ -26,7 +26,7 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
           title: Text(
             "Let's Get Started",
             style: TextStyle(
-              fontSize: 26.sp,
+              fontSize: 22.sp,
               color: const Color(0xffFF7126),
               fontWeight: FontWeight.w500,
             ),

@@ -13,6 +13,8 @@ class OrderItem extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 8.h, vertical: 6.h),
       child: Card(
+         shape: RoundedRectangleBorder(
+    borderRadius: BorderRadius.circular(10.0),),
         // margin: EdgeInsets.symmetric(horizontal: 4.w,vertical: 10.h),
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 10.0.w, vertical: 20.h),
