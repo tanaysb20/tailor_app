@@ -46,7 +46,7 @@ class DropdownInput extends StatelessWidget {
         onChanged: isEnabled == true ? onChanged : null,
         
         style: TextStyle(
-          fontFamily: "Inter",
+          fontFamily: "Sora",
           fontSize: 23.sp,
           color: Colors.black,
           fontWeight: FontWeight.w400,
@@ -78,7 +78,7 @@ TextStyle textFieldStyle1111(
         Color color = Colors.black}) =>
     TextStyle(
       color: color,
-      fontFamily: "Inter",
+      fontFamily: "Sora",
       fontSize: fontSize.sp,
       fontWeight: weight,
     );
@@ -90,7 +90,7 @@ defaultBorderTextField1111({bool fill = false}) => OutlineInputBorder(
     borderRadius: BorderRadius.circular(8));
 TextStyle customStyle = TextStyle(
   color: Colors.black,
-  fontFamily: "Inter",
+  fontFamily: "Sora",
   fontSize: 16.sp,
   fontWeight: FontWeight.w700,
 );

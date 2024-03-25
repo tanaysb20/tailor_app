@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:tailor_app/Reusable%20components/order_item.dart';
 import 'package:tailor_app/Reusable%20components/text_field.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -76,7 +77,32 @@ class _OtpScreenState extends State<HomeScreen>
                                 Color(0xffFF9056), "100", "Total Customers","box4")),
                       ],
                     ),
-                  )
+                  ),
+                    Container(
+                          margin: EdgeInsets.symmetric(horizontal: 8.w,vertical: 15.h),
+                      alignment: Alignment.centerLeft,
+                      child: Text("Current Order",  style: TextStyle(
+                                      fontSize: 26.sp,
+                                      color:  Color(0xff101010),
+                                      fontWeight: FontWeight.w600,
+                                    ),),
+                    ),
+                    Padding(
+                padding: EdgeInsets.symmetric(horizontal: 12.0.w),
+                child: CustomTextField(
+                  prefixIcon: true,
+                    onChanged: (value) {
+                      
+                    },
+
+                    margin: false,
+                    hintText: "Search..."),
+              ),
+              
+              OrderItem(),
+              OrderItem(),
+              OrderItem(),
+              OrderItem(),
                 ],
               ),
             ),
@@ -127,3 +153,5 @@ Widget customBox(Color txcolor, String text1, String text2,String image) {
     ),
   );
 }
+
+

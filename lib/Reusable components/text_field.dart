@@ -26,6 +26,7 @@ class CustomTextField extends StatelessWidget {
   bool changeColor;
   Color textColor;
   bool isDense;
+  bool prefixIcon;
   String labelText;
   void Function(String)? onChanged;
   Function(String?)? onSaved;
@@ -42,6 +43,7 @@ class CustomTextField extends StatelessWidget {
     this.hintText = "",
     this.maxCheck = 1,
     this.disable = true,
+    this.prefixIcon = false,
     this.controller,
     this.labelText = "",
     this.intitalVal = "",
@@ -109,7 +111,7 @@ class CustomTextField extends StatelessWidget {
               maxLength: maxlength ? 10 : null,
               style: TextStyle(
                 color: textColor,
-                fontFamily: "Inter",
+                fontFamily: "Sora",
                 fontSize: 23.sp,
                 fontWeight: FontWeight.w400,
               ),
@@ -118,7 +120,9 @@ class CustomTextField extends StatelessWidget {
                 fillColor: disable ?Colors.white:null ,
           
                 prefixIcon:
-                    Text("  $prefix", style: textFieldStyle(fontSize: 22.sp)),
+                    prefixIcon? Container(
+                      margin: EdgeInsets.only(left: 4.w,right: 4.w),
+                      child: Icon(Icons.search,color: Color(0xffFF9056),size: 32.sp)):null,
                 prefixIconConstraints:
                     BoxConstraints(minWidth: 2, minHeight: 30.h),
                 floatingLabelBehavior: FloatingLabelBehavior.always,
@@ -157,7 +161,7 @@ TextStyle textFieldStyle(
         Color color = Colors.black}) =>
     TextStyle(
       color: color,
-      fontFamily: "Inter",
+      fontFamily: "Sora",
       fontSize: fontSize,
       fontWeight: weight,
     );
@@ -169,7 +173,7 @@ defaultBorderTextField({bool fill = false}) => OutlineInputBorder(
     borderRadius: BorderRadius.circular(8));
 TextStyle customStyle = TextStyle(
   color: Colors.black,
-  fontFamily: "Inter",
+  fontFamily: "Sora",
   fontSize: 16.sp,
   fontWeight: FontWeight.w700,
 );
@@ -203,7 +207,7 @@ class DateInput extends StatelessWidget {
             style: const TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 15,
-                fontFamily: "Inter"),
+                fontFamily: "Sora"),
             textAlign: TextAlign.end,
           ),
         ),
@@ -216,7 +220,7 @@ class DateInput extends StatelessWidget {
           child: TextFormField(
             style: const TextStyle(
               fontWeight: FontWeight.bold,
-              fontFamily: "Inter",
+              fontFamily: "Sora",
               fontSize: 15,
             ),
             enabled: isEnabled == true,
