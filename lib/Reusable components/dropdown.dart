@@ -34,10 +34,11 @@ class DropdownInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: 50.h,
       color: isEnabled == true ? Colors.white : Colors.black,
       margin: EdgeInsets.zero,
       child: DropdownButtonFormField(
-        isExpanded: true,
+        
         
         focusNode: FocusNode(canRequestFocus: false),
         
@@ -47,7 +48,7 @@ class DropdownInput extends StatelessWidget {
         
         style: TextStyle(
           fontFamily: "Sora",
-          fontSize: 23.sp,
+          fontSize: 18.sp,
           color: Colors.black,
           fontWeight: FontWeight.w400,
         ),
@@ -55,13 +56,13 @@ class DropdownInput extends StatelessWidget {
           hintText: value.toString(),
           
           hintStyle:
-              textFieldStyle1111(color: Colors.black, fontSize: 22.sp),
+              textFieldStyle1111(color: Colors.black, fontSize: 16.sp),
           border: defaultBorderTextField1111(),
           focusedBorder: defaultBorderTextField1111(),
           enabledBorder: defaultBorderTextField1111(),
           contentPadding:
-              EdgeInsets.symmetric(vertical: 18.h, horizontal: 14.w),
-          isCollapsed: true,
+              EdgeInsets.symmetric(vertical: 8.h, horizontal: 14.w),
+          
         ),
       ),
     );

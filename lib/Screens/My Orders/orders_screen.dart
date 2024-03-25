@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:tailor_app/Reusable%20components/dropdown.dart';
+import 'package:tailor_app/Reusable%20components/order_item.dart';
+import 'package:tailor_app/Reusable%20components/text_field.dart';
 
 import '../../Modals/relatives_modal.dart';
 
@@ -16,32 +20,12 @@ class _OtpScreenState extends State<RelativesScreen>
   int tab = 1;
   DateTime? selectedDate;
   bool loading = false;
+  TextEditingController sortDropDownController = TextEditingController();
 
-  List<RelationModal> relativesList = [
-    RelationModal(
-        id: "1",
-        image: "",
-        name: "Tanay",
-        phonenos: "9602901242",
-        relation: "Child"),
-    RelationModal(
-        id: "2",
-        image: "",
-        name: "Saksham",
-        phonenos: "741408000",
-        relation: "Child"),
-    RelationModal(
-        id: "3",
-        image: "",
-        name: "Vinod",
-        phonenos: "9829244470",
-        relation: "Father"),
-    RelationModal(
-        id: "4",
-        image: "",
-        name: "Babita",
-        phonenos: "9414063031",
-        relation: "Mother"),
+  List<String> relativesList = [
+    "Active Order",
+    "Deliver Order",
+    "Recent Order",
   ];
   List<RelationModal> filterRelativesList = [];
 
@@ -49,7 +33,7 @@ class _OtpScreenState extends State<RelativesScreen>
   void initState() {
     // TODO: implement initState
     super.initState();
-    filterRelativesList = relativesList;
+    
 
     // setState(() {
     //   loading =true;
@@ -61,12 +45,8 @@ class _OtpScreenState extends State<RelativesScreen>
     //  });
   }
 
- 
-
   @override
   void dispose() {
-    
-
     super.dispose();
   }
 
@@ -78,12 +58,70 @@ class _OtpScreenState extends State<RelativesScreen>
         ? Center(
             child: CircularProgressIndicator(color: const Color(0xff112951)))
         : SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-            
-            ],
-          ),
-        );
+            child: Column(
+              
+              children: [
+                Container(
+                  margin: EdgeInsets.only(right: 20.w,top: 20.h),
+                  width: double.infinity,
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text(
+                        "Sort by :",
+                        style: textFieldStyle(
+                            fontSize: 18.sp, weight: FontWeight.w500),
+                      ),
+                      SizedBox(width: 10.w),
+                     Container(
+                      // margin: EdgeInsets.symmetric(
+                      //     vertical: 14.h, horizontal: 14.w),
+                      width: 210.w,
+                      
+                      child: DropdownInput(
+                        isMargin: false,
+                        // validatorsss: (value) {
+                        //   if (value == null || value.isEmpty) {
+                        //     return 'Relationship can\'t be empty';
+                        //   }
+                        //   return null;
+                        // },
+                        // controller: relationshipDropdownController,
+                        value: sortDropDownController.value.text.isEmpty
+                            ? "Select Order Type"
+                            : sortDropDownController.value.text,
+
+                        // labelText: "Select Description Of Goods",
+                        // value: consajda.value.text,
+
+                        isEnabled: true,
+                        inputFieldWidth: double.infinity,
+                        items: relativesList.map((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }).toList(),
+
+                        onChanged: (value) {
+                          setState(() {});
+                        },
+                      ),
+                    ),
+                    ],
+                  ),
+                ),
+                ListView.builder(
+                  shrinkWrap: true,
+                  controller: ScrollController(keepScrollOffset: false),
+                  itemCount: 20,
+                  itemBuilder: (context, index) {
+                    return OrderItem();
+                  },
+                )
+              ],
+            ),
+          );
   }
 }
