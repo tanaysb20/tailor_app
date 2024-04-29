@@ -29,7 +29,8 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
   TextEditingController customerNameController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
   TextEditingController addressController = TextEditingController();
-  TextEditingController cityController = TextEditingController();
+  TextEditingController cityController =
+      TextEditingController(text: 'HUBBALLI');
   String sendImage = "";
   File? showImage;
 
@@ -232,6 +233,8 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
                           text: selectedCustomer.phone_no);
                       addressController =
                           TextEditingController(text: selectedCustomer.address);
+                      cityController =
+                          TextEditingController(text: selectedCustomer.city);
 
                       sendImage =
                           "${UrlHolder.baseUrl}${selectedCustomer.avtar}${selectedCustomer.avtar}";
@@ -290,7 +293,7 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
                         inputTextStyle: textFieldStyle(),
                         decoration: InputDecoration(
                           filled: true,
-                          fillColor: Colors.black,
+                          fillColor: Colors.white,
                           contentPadding: EdgeInsets.symmetric(
                               vertical: 12.h, horizontal: 14.w),
                           border: OutlineInputBorder(

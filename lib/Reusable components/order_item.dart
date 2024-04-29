@@ -18,7 +18,7 @@ class OrderItem extends StatelessWidget {
       onTap: () {
         Navigator.of(context).push(MaterialPageRoute(
           builder: (context) {
-            return OrderDetailScreen();
+            return OrderDetailScreen(orderItem: orderItem);
           },
         ));
       },
