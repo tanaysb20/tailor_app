@@ -1,9 +1,25 @@
-class UserModal{
+class OrderModal {
   String id;
-  String contact_person_name;
-  String mobile_number;
+  String order_no;
+  String bill_no;
+  String cust_name;
+  String mobile_no;
   String address;
-  String image;
-  String current_wallet_points;
-  UserModal({this.address="",this.contact_person_name="",this.id="",this.image="",this.mobile_number="",this.current_wallet_points=""});
+  String created_at;
+  String cust_id;
+  String sales_name;
+  String status;
+  String city_id;
+  OrderModal(
+      {this.address = "",
+      this.order_no = "",
+      this.id = "",
+      this.bill_no = "",
+      this.cust_name = "",
+      this.mobile_no = "",
+      this.city_id = "",
+      this.created_at = "",
+      this.cust_id = "",
+      this.sales_name = "",
+      this.status = ""});
 }

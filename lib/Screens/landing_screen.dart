@@ -1,8 +1,9 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tailor_app/Providers/home_provider.dart';
 import 'package:tailor_app/Screens/Home%20screen/home_screen.dart';
 import 'package:tailor_app/Screens/My%20customer/customer_screen.dart';
 import 'package:tailor_app/Screens/My%20Orders/orders_screen.dart';
@@ -27,25 +28,22 @@ class _OtpScreenState extends State<LandingScreen>
     // TODO: implement initState
     super.initState();
     _tabController = TabController(length: 2, vsync: this, initialIndex: 0);
-    // setState(() {
-    //   loading = true;
-    // });
-    // Provider.of<HomeProvider>(context, listen: false)
-    //     .getCategories()
-    //     .then((value) {
-    //   if (Provider.of<HomeProvider>(context, listen: false)
-    //       .categoryList
-    //       .isNotEmpty) {
-    //     Provider.of<HomeProvider>(context, listen: false).getCategoriesItems(
-    //         Provider.of<HomeProvider>(context, listen: false)
-    //             .categoryList[0]
-    //             .id);
-    //   }
-    // }).then((value) {
-    //   setState(() {
-    //     loading = false;
-    //   });
-    // });
+    setState(() {
+      loading = true;
+    });
+    Provider.of<HomeProvider>(context, listen: false)
+        .getOrders()
+        .then((value) =>
+            Provider.of<HomeProvider>(context, listen: false).getCounts())
+        .then((value) =>
+            Provider.of<HomeProvider>(context, listen: false).getCity())
+        .then((value) {
+      Provider.of<HomeProvider>(context, listen: false).getProductList();
+    }).then((value) {
+      setState(() {
+        loading = false;
+      });
+    });
   }
 
   @override
@@ -57,10 +55,7 @@ class _OtpScreenState extends State<LandingScreen>
 
   @override
   Widget build(BuildContext context) {
-    
-    return 
-    
-    Scaffold(
+    return Scaffold(
       appBar: AppBar(
         toolbarHeight: 70.h,
         automaticallyImplyLeading: false,
@@ -68,21 +63,23 @@ class _OtpScreenState extends State<LandingScreen>
         titleSpacing: 20.w,
         centerTitle: false,
         title: currentIndexx == 0
-            ?  Row(
-              children: [
-                SvgPicture.asset("assets/logohome.svg",height: 35.h,fit: BoxFit.cover),
-                SizedBox(width: 8.w),
-                Text("Tailor App",  style: TextStyle(
-                  fontSize: 24.sp,
-                  color: const Color(0xffFF7126),
-                  fontWeight: FontWeight.w500,
-                ),)
-              ],
-            )
+            ? Row(
+                children: [
+                  SvgPicture.asset("assets/logohome.svg",
+                      height: 35.h, fit: BoxFit.cover),
+                  SizedBox(width: 8.w),
+                  Text(
+                    "Tailor App",
+                    style: TextStyle(
+                      fontSize: 24.sp,
+                      color: const Color(0xffFF7126),
+                      fontWeight: FontWeight.w500,
+                    ),
+                  )
+                ],
+              )
             : Text(
-               currentIndexx == 1
-                    ? "My Orders":
-                 "My Customers",
+                currentIndexx == 1 ? "My Orders" : "My Customers",
                 style: TextStyle(
                   fontSize: 24.sp,
                   color: const Color(0xffFF7126),
@@ -125,7 +122,6 @@ class _OtpScreenState extends State<LandingScreen>
       bottomNavigationBar: BottomNavigationBar(
           selectedIconTheme: const IconThemeData(
             color: Color(0xffFF7126),
-            
           ),
           items: <BottomNavigationBarItem>[
             BottomNavigationBarItem(
@@ -133,14 +129,12 @@ class _OtpScreenState extends State<LandingScreen>
               activeIcon: SvgPicture.asset("assets/home.svg",
                   height: 40.h, color: Color(0xffFF7126)),
               label: 'Home',
-              
             ),
             BottomNavigationBarItem(
                 icon: SvgPicture.asset("assets/tab2.svg", height: 40.h),
                 activeIcon: SvgPicture.asset("assets/tab2.svg",
                     height: 40.h, color: Color(0xffFF7126)),
                 label: "My Orders"),
-          
             BottomNavigationBarItem(
               icon: SvgPicture.asset("assets/tab3.svg", height: 40.h),
               activeIcon: SvgPicture.asset("assets/tab3.svg",
@@ -148,7 +142,6 @@ class _OtpScreenState extends State<LandingScreen>
                   height: 40.h,
                   color: Color(0xffFF7126)),
               label: 'My Customers',
-              
             ),
           ],
           type: BottomNavigationBarType.fixed,

@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
+import 'package:tailor_app/Providers/auth_provider.dart';
 import 'package:tailor_app/Reusable%20components/custom_button.dart';
 import 'package:tailor_app/Reusable%20components/text_field.dart';
-import 'package:tailor_app/Screens/Auth%20screen/otp_screen.dart';
+import 'package:tailor_app/Screens/landing_screen.dart';
 
 class PhoneNumberScreen extends StatefulWidget {
   const PhoneNumberScreen({super.key});
@@ -13,10 +16,11 @@ class PhoneNumberScreen extends StatefulWidget {
 
 class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
   TextEditingController mobileNumberController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
-    // final item = Provider.of<AuthProvider>(context, listen: true);
+    final item = Provider.of<AuthProvider>(context, listen: true);
     return Form(
       key: _formKey,
       child: Scaffold(
@@ -44,9 +48,8 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
                         fontSize: 20.sp, color: Colors.grey.shade700)),
                 SizedBox(height: 30.h),
                 Text("Mobile Number",
-                    style: textFieldStyle(
-                        fontSize: 20.sp,
-                        color: Colors.black)),
+                    style:
+                        textFieldStyle(fontSize: 20.sp, color: Colors.black)),
                 SizedBox(height: 15.h),
                 CustomTextField(
                   controller: mobileNumberController,
@@ -65,27 +68,48 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
                   txKeyboardType: TextInputType.number,
                   hintText: "Enter your mobile Number",
                 ),
-                SizedBox(height: 70.h),
+                Text("Password",
+                    style:
+                        textFieldStyle(fontSize: 20.sp, color: Colors.black)),
+                SizedBox(height: 15.h),
+                CustomTextField(
+                  controller: passwordController,
+                  margin: false,
+                  obscureText: true,
+                  textColor: Color.fromARGB(255, 0, 13, 24),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Password number can\'t be empty';
+                    }
+                    return null;
+                  },
+                  txKeyboardType: TextInputType.number,
+                  hintText: "Enter your password",
+                ),
+                SizedBox(height: 85.h),
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: 8.0.w),
                   child: CustomButtonScreen(
-                      text1: "Send OTP",
+                      text1: "Login",
                       check: true,
                       bgcolor: Color(0xffFF7126),
                       fun: () async {
-                        // if (_formKey.currentState!.validate()) {
-                        //   EasyLoading.show(maskType: EasyLoadingMaskType.black);
-                        //   bool check = await item
-                        //       .sendOtp(mobileNumberController.value.text);
-                        //     EasyLoading.dismiss();
-                        //   if (check) {
+                        // log(mobileNumberController.value.text);
+                        // log(passwordController.value.text);
+                        if (_formKey.currentState!.validate()) {
+                          EasyLoading.show(maskType: EasyLoadingMaskType.black);
+                          bool check = await item.sendOtp(
+                              mobileNumberController.value.text,
+                              passwordController.value.text);
+                          EasyLoading.dismiss();
+                          if (check) {
                             Navigator.of(context).push(MaterialPageRoute(
                               builder: (context) {
-                                return OtpScreen(mobileNumber: mobileNumberController.value.text);
+                                return LandingScreen();
                               },
                             ));
-                        //   }
-                        // } else {}
+                          }
+                        } else {}
                       },
                       color: Colors.white,
                       width: 400.w,

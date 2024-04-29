@@ -74,8 +74,7 @@ class CustomTextField extends StatelessWidget {
   });
 
   defaultBorderTextField(
-          {bool fill = false,
-          Color color = const Color(0xffFF7126)}) =>
+          {bool fill = false, Color color = const Color(0xffFF7126)}) =>
       OutlineInputBorder(
           borderSide: BorderSide(color: color, width: 2),
           borderRadius: BorderRadius.circular(8));
@@ -93,7 +92,7 @@ class CustomTextField extends StatelessWidget {
               : EdgeInsets.zero,
           decoration: const BoxDecoration(color: Colors.transparent),
           child: Theme(
-             data: Theme.of(context).copyWith(disabledColor: Colors.white),
+            data: Theme.of(context).copyWith(disabledColor: Colors.white),
             child: TextFormField(
               controller: controller,
               focusNode: focusNode,
@@ -112,17 +111,19 @@ class CustomTextField extends StatelessWidget {
               style: TextStyle(
                 color: textColor,
                 fontFamily: "Sora",
-                fontSize: 23.sp,
+                fontSize: 20.sp,
                 fontWeight: FontWeight.w400,
               ),
               decoration: InputDecoration(
                 filled: true,
-                fillColor: disable ?Colors.white:null ,
-          
-                prefixIcon:
-                    prefixIcon? Container(
-                      margin: EdgeInsets.only(left: 6.w,right: 4.w),
-                      child: Icon(Icons.search,color: Color(0xffFF9056),size: 29.sp)):null,
+                fillColor: disable ? Colors.white : null,
+
+                prefixIcon: prefixIcon
+                    ? Container(
+                        margin: EdgeInsets.only(left: 6.w, right: 4.w),
+                        child: Icon(Icons.search,
+                            color: Color(0xffFF9056), size: 29.sp))
+                    : null,
                 prefixIconConstraints:
                     BoxConstraints(minWidth: 2, minHeight: 30.h),
                 floatingLabelBehavior: FloatingLabelBehavior.always,
@@ -131,17 +132,21 @@ class CustomTextField extends StatelessWidget {
                 contentPadding:
                     EdgeInsets.symmetric(vertical: 16.h, horizontal: 14.w),
                 border: defaultBorderTextField(),
-                
+
                 disabledBorder:
                     defaultBorderTextField(color: Colors.grey.shade500),
-          
+
                 focusedBorder: defaultBorderTextField(),
-                enabledBorder:
-                    defaultBorderTextField(),
+                enabledBorder: defaultBorderTextField(),
+
+                labelText: labelText,
                 hintText: hintText,
-          
-                hintStyle:
-                    textFieldStyle(color: Colors.grey.shade900, fontSize: 16.sp),
+
+                labelStyle: textFieldStyle(
+                    color: Colors.grey.shade900, fontSize: 16.sp),
+
+                hintStyle: textFieldStyle(
+                    color: Colors.grey.shade900, fontSize: 16.sp),
               ),
               validator: validator,
               inputFormatters: inputFormatters,
@@ -205,9 +210,7 @@ class DateInput extends StatelessWidget {
           child: Text(
             inputName ?? '',
             style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 15,
-                fontFamily: "Sora"),
+                fontWeight: FontWeight.bold, fontSize: 15, fontFamily: "Sora"),
             textAlign: TextAlign.end,
           ),
         ),
@@ -218,10 +221,10 @@ class DateInput extends StatelessWidget {
           width: inputFieldWidth ?? 100,
           color: Colors.white,
           child: TextFormField(
-            style: const TextStyle(
+            style: TextStyle(
               fontWeight: FontWeight.bold,
               fontFamily: "Sora",
-              fontSize: 15,
+              fontSize: 15.sp,
             ),
             enabled: isEnabled == true,
             keyboardType: TextInputType.datetime,

@@ -38,41 +38,31 @@ class DropdownInput extends StatelessWidget {
       color: isEnabled == true ? Colors.white : Colors.black,
       margin: EdgeInsets.zero,
       child: DropdownButtonFormField(
-        
-        
         focusNode: FocusNode(canRequestFocus: false),
-        
         validator: validatorsss,
         items: items,
         onChanged: isEnabled == true ? onChanged : null,
-        
         style: TextStyle(
           fontFamily: "Sora",
-          fontSize: 18.sp,
+          fontSize: 22.sp,
           color: Colors.black,
           fontWeight: FontWeight.w400,
         ),
         decoration: InputDecoration(
           hintText: value.toString(),
-          
-          hintStyle:
-              textFieldStyle1111(color: Colors.black, fontSize: 16.sp),
+          hintStyle: textFieldStyle1111(color: Colors.black, fontSize: 23.sp),
           border: defaultBorderTextField1111(),
           focusedBorder: defaultBorderTextField1111(),
           enabledBorder: defaultBorderTextField1111(),
-          contentPadding:
-              EdgeInsets.symmetric(vertical: 8.h, horizontal: 14.w),
-          
+          contentPadding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 14.w),
         ),
       ),
     );
   }
 }
 
-
-
 TextStyle textFieldStyle1111(
-        {double fontSize = 20,
+        {double fontSize = 23,
         FontWeight weight = FontWeight.w400,
         FontStyle style = FontStyle.normal,
         bool isHint = false,
@@ -86,7 +76,7 @@ TextStyle textFieldStyle1111(
 
 defaultBorderTextField1111({bool fill = false}) => OutlineInputBorder(
     borderSide: BorderSide(
-      color: Colors.blue.shade900,
+      color: Color(0xffFF7126),
     ),
     borderRadius: BorderRadius.circular(8));
 TextStyle customStyle = TextStyle(

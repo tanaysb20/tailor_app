@@ -39,7 +39,11 @@ dependencies:
   flutter_otp_text_field:
   image_picker:
   simple_barcode_scanner:
+  easy_autocomplete:
   shared_preferences:
+  pagination_flutter:
+  pull_to_refresh:
+  infinite_scroll_pagination:
   # qr_code_scanner:
   flutter_screenutil:
   http:
