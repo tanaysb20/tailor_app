@@ -469,7 +469,7 @@ class _AddCustomerScreenState extends State<AddOrderScreen> {
                                 Expanded(
                                     child: ElevatedButton(
                                         style: ElevatedButton.styleFrom(
-                                            primary: Color(0xffFF7126)),
+                                            backgroundColor: Color(0xffFF7126)),
                                         onPressed: () async {
                                           final DateTime? picked =
                                               await showDatePicker(
@@ -779,7 +779,7 @@ class _AddCustomerScreenState extends State<AddOrderScreen> {
                                 Expanded(
                                     child: ElevatedButton(
                                         style: ElevatedButton.styleFrom(
-                                            primary: Color(0xffFF7126)),
+                                            backgroundColor: Color(0xffFF7126)),
                                         onPressed: () async {
                                           final DateTime? picked =
                                               await showDatePicker(
@@ -1333,7 +1333,7 @@ class _AddCustomerScreenState extends State<AddOrderScreen> {
                                 Expanded(
                                     child: ElevatedButton(
                                         style: ElevatedButton.styleFrom(
-                                            primary: Color(0xffFF7126)),
+                                            backgroundColor: Color(0xffFF7126)),
                                         onPressed: () async {
                                           final DateTime? picked =
                                               await showDatePicker(

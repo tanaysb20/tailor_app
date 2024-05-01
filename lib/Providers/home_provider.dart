@@ -257,7 +257,7 @@ class HomeProvider with ChangeNotifier {
 
     if (response.statusCode == 200) {
       final xyz = await response.stream.bytesToString();
-
+      print(xyz);
       final List responseData = json.decode(xyz);
 
       responseData.forEach((element) {
@@ -385,43 +385,43 @@ class HomeProvider with ChangeNotifier {
     }
   }
 
-  // Future getOrders() async {
-  //   final prefs = await SharedPreferences.getInstance();
-  //   var _accessToken = await prefs.getString("userToken");
-  //   var headers = {
-  //     'Accept': 'application/json',
-  //     'Authorization': 'Bearer $_accessToken'
-  //   };
-  //   var request = Request(
-  //       'GET', Uri.parse('${UrlHolder.baseUrl}${UrlHolder.getOrders}'));
+// Future getOrders() async {
+//   final prefs = await SharedPreferences.getInstance();
+//   var _accessToken = await prefs.getString("userToken");
+//   var headers = {
+//     'Accept': 'application/json',
+//     'Authorization': 'Bearer $_accessToken'
+//   };
+//   var request = Request(
+//       'GET', Uri.parse('${UrlHolder.baseUrl}${UrlHolder.getOrders}'));
 
-  //   request.headers.addAll(headers);
+//   request.headers.addAll(headers);
 
-  //   List<TransactionModal> demoTrasactionList = [];
+//   List<TransactionModal> demoTrasactionList = [];
 
-  //   StreamedResponse response = await request.send();
+//   StreamedResponse response = await request.send();
 
-  //   if (response.statusCode == 200) {
-  //     final xyz = await response.stream.bytesToString();
+//   if (response.statusCode == 200) {
+//     final xyz = await response.stream.bytesToString();
 
-  //     final List responseData = json.decode(xyz)["data"]["result"];
-  //     responseData.forEach((element) {
-  //       return demoTrasactionList.add(TransactionModal(
-  //         id: element["product"]["id"].toString(),
-  //         name: element["product"]["name"] ?? "",
-  //         date: element["product"]["created_at"] ?? "",
-  //         point: element["product"]["points"] ?? "",
-  //       ));
-  //     });
+//     final List responseData = json.decode(xyz)["data"]["result"];
+//     responseData.forEach((element) {
+//       return demoTrasactionList.add(TransactionModal(
+//         id: element["product"]["id"].toString(),
+//         name: element["product"]["name"] ?? "",
+//         date: element["product"]["created_at"] ?? "",
+//         point: element["product"]["points"] ?? "",
+//       ));
+//     });
 
-  //     orderList = demoTrasactionList;
+//     orderList = demoTrasactionList;
 
-  //     notifyListeners();
-  //   } else {
-  //     final xyz = await response.stream.bytesToString();
+//     notifyListeners();
+//   } else {
+//     final xyz = await response.stream.bytesToString();
 
-  //     final responseData = json.decode(xyz)["msg"];
-  //     message(responseData);
-  //   }
-  // }
+//     final responseData = json.decode(xyz)["msg"];
+//     message(responseData);
+//   }
+// }
 }
