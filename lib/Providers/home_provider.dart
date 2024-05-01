@@ -19,7 +19,7 @@ class HomeProvider with ChangeNotifier {
   List<CustomerModal> customerList = [];
   List<TransactionModal> trasactionList = [];
 
-  List<OrderModal> orderList = [];
+  // List<OrderModal> orderList = [];
   List<ProductModal> productList = [];
   List<CityModal> cityList = [];
   List<String> cityNames = [];
@@ -31,13 +31,14 @@ class HomeProvider with ChangeNotifier {
   List<ProductItemDetail> selectedProductsItemDetail = [];
   List<PatternModal> patternList = [];
 
-  Future getOrders() async {
+  Future<List<OrderModal>> getOrders(
+      {int pageCount = 30, required int page}) async {
     final prefs = await SharedPreferences.getInstance();
     var _accessToken = await prefs.getString("userToken");
 
     var headers = {'Authorization': 'Bearer $_accessToken'};
-    var request = Request(
-        'GET', Uri.parse('${UrlHolder.baseUrl}${UrlHolder.orderList}?page=1'));
+    var request = Request('GET',
+        Uri.parse('${UrlHolder.baseUrl}${UrlHolder.orderList}?page=${page}'));
 
     request.headers.addAll(headers);
 
@@ -65,10 +66,11 @@ class HomeProvider with ChangeNotifier {
           status: element["status"] ?? "",
         ));
       });
-      orderList = demoOrderList;
-      notifyListeners();
+      return demoOrderList;
+      // notifyListeners();
     } else {
       print(response.reasonPhrase);
+      return [];
     }
   }
 
