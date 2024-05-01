@@ -356,12 +356,12 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
                   hintText: "Enter Address",
                   maxCheck: 4,
                   margin: false,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Address can\'t be empty';
-                    }
-                    return null;
-                  },
+                  // validator: (value) {
+                  //   if (value == null || value.isEmpty) {
+                  //     return 'Address can\'t be empty';
+                  //   }
+                  //   return null;
+                  // },
                 ),
                 SizedBox(height: 40.h),
                 Container(

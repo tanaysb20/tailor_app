@@ -23,6 +23,7 @@ class AddOrderScreen extends StatefulWidget {
 class _AddCustomerScreenState extends State<AddOrderScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool save = true;
+  TextEditingController invoiceController = TextEditingController();
   TextEditingController productController = TextEditingController();
   TextEditingController patternController = TextEditingController();
   TextEditingController productTypeController = TextEditingController();
@@ -115,7 +116,37 @@ class _AddCustomerScreenState extends State<AddOrderScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      SizedBox(height: 25.h),
+                      SizedBox(height: 20.h),
+                      //// first heading
+                      Row(
+                        children: [
+                          Text(
+                            "Order No.#T2472",
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 24.sp,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          SizedBox(width: 10.w),
+                          Expanded(
+                            child: CustomTextField(
+                              controller: invoiceController,
+                              margin: false,
+                              textColor: Color.fromARGB(255, 0, 13, 24),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Mobile number can\'t be empty';
+                                }
+                                return null;
+                              },
+                              txKeyboardType: TextInputType.number,
+                              hintText: "Enter Invoice No",
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 15.h),
+                      //// Dropdown heading
                       Container(
                         margin: EdgeInsets.only(left: 5.w, bottom: 20.h),
                         child: DropdownInput(

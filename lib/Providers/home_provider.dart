@@ -36,8 +36,8 @@ class HomeProvider with ChangeNotifier {
     var _accessToken = await prefs.getString("userToken");
 
     var headers = {'Authorization': 'Bearer $_accessToken'};
-    var request =
-        Request('GET', Uri.parse('${UrlHolder.baseUrl}${UrlHolder.orderList}'));
+    var request = Request(
+        'GET', Uri.parse('${UrlHolder.baseUrl}${UrlHolder.orderList}?page=1'));
 
     request.headers.addAll(headers);
 
@@ -152,8 +152,8 @@ class HomeProvider with ChangeNotifier {
     var _accessToken = await prefs.getString("userToken");
     var headers = {'Authorization': 'Bearer $_accessToken'};
 
-    var request = Request(
-        'GET', Uri.parse('${UrlHolder.baseUrl}${UrlHolder.productList}'));
+    var request = Request('GET',
+        Uri.parse('${UrlHolder.baseUrl}${UrlHolder.productList}?page=1'));
 
     request.headers.addAll(headers);
 
@@ -258,7 +258,7 @@ class HomeProvider with ChangeNotifier {
     if (response.statusCode == 200) {
       final xyz = await response.stream.bytesToString();
       print(xyz);
-      final List responseData = json.decode(xyz);
+      final List responseData = json.decode(xyz)["data"];
 
       responseData.forEach((element) {
         return demoCityList.add(CityModal(
