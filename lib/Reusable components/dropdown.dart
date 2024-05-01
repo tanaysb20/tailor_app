@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class DropdownInput extends StatelessWidget {
   final String? inputName;
   final TextEditingController? controller;
+  final String textValue;
   final dynamic value;
   final String labelText;
   final double? inputLabelWidth;
@@ -22,6 +23,7 @@ class DropdownInput extends StatelessWidget {
     this.labelText = "",
     this.controller,
     this.value,
+    this.textValue = "",
     this.inputLabelWidth,
     this.validatorsss,
     this.inputFieldWidth,
@@ -34,7 +36,6 @@ class DropdownInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 50.h,
       color: isEnabled == true ? Colors.white : Colors.black,
       margin: EdgeInsets.zero,
       child: DropdownButtonFormField(
@@ -54,7 +55,8 @@ class DropdownInput extends StatelessWidget {
           border: defaultBorderTextField1111(),
           focusedBorder: defaultBorderTextField1111(),
           enabledBorder: defaultBorderTextField1111(),
-          contentPadding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 14.w),
+          contentPadding:
+              EdgeInsets.symmetric(vertical: 15.h, horizontal: 14.w),
         ),
       ),
     );

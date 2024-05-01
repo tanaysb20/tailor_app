@@ -259,77 +259,419 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                                       color: Colors.black, fontSize: 21.sp),
                                 ),
                                 SizedBox(height: 30.h),
-                                Divider(),
+                                Divider(thickness: 2),
                               ],
                             )
-                          : Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                SizedBox(height: 20.h),
-                                Text(
-                                  e.product_name,
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 21.sp,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                SizedBox(height: 20.h),
-                                Text(
-                                  "Pattern",
-                                  style: TextStyle(
-                                      color: Color(0xff757575),
-                                      fontSize: 19.sp),
-                                ),
-                                SizedBox(height: 10.h),
-                                Text(
-                                  e.pattern_name,
-                                  style: TextStyle(
-                                      color: Colors.black, fontSize: 21.sp),
-                                ),
-                                SizedBox(height: 20.h),
-                                Text(
-                                  "Other Detail",
-                                  style: TextStyle(
-                                      color: Color(0xff757575),
-                                      fontSize: 19.sp),
-                                ),
-                                SizedBox(height: 10.h),
-                                Text(
-                                  "${e.other_detail}",
-                                  style: TextStyle(
-                                      color: Colors.black, fontSize: 21.sp),
-                                ),
-                                SizedBox(height: 20.h),
-                                Text(
-                                  "Quantity",
-                                  style: TextStyle(
-                                      color: Color(0xff757575),
-                                      fontSize: 19.sp),
-                                ),
-                                SizedBox(height: 10.h),
-                                Text(
-                                  "${e.qty}",
-                                  style: TextStyle(
-                                      color: Colors.black, fontSize: 21.sp),
-                                ),
-                                SizedBox(height: 20.h),
-                                Text(
-                                  "Delivery Date",
-                                  style: TextStyle(
-                                      color: Color(0xff757575),
-                                      fontSize: 19.sp),
-                                ),
-                                SizedBox(height: 10.h),
-                                Text(
-                                  "${e.delivery_date}",
-                                  style: TextStyle(
-                                      color: Colors.black, fontSize: 21.sp),
-                                ),
-                                SizedBox(height: 30.h),
-                                Divider(),
-                              ],
-                            );
+                          : e.type == "2"
+                              ? Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    SizedBox(height: 20.h),
+                                    Text(
+                                      e.product_name,
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 21.sp,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    SizedBox(height: 20.h),
+                                    Text(
+                                      "Pattern",
+                                      style: TextStyle(
+                                          color: Color(0xff757575),
+                                          fontSize: 19.sp),
+                                    ),
+                                    SizedBox(height: 10.h),
+                                    Text(
+                                      e.pattern_name,
+                                      style: TextStyle(
+                                          color: Colors.black, fontSize: 21.sp),
+                                    ),
+                                    SizedBox(height: 20.h),
+                                    Text(
+                                      "Bottom length",
+                                      style: TextStyle(
+                                          color: Color(0xff757575),
+                                          fontSize: 19.sp),
+                                    ),
+                                    SizedBox(height: 10.h),
+                                    Text(
+                                      "${e.bottom_len}",
+                                      style: TextStyle(
+                                          color: Colors.black, fontSize: 21.sp),
+                                    ),
+                                    SizedBox(height: 20.h),
+                                    Text(
+                                      "Bottom half form length",
+                                      style: TextStyle(
+                                          color: Color(0xff757575),
+                                          fontSize: 19.sp),
+                                    ),
+                                    SizedBox(height: 10.h),
+                                    Text(
+                                      "${e.bottm_half_form_len_1}, ${e.bottm_half_form_len_2}",
+                                      style: TextStyle(
+                                          color: Colors.black, fontSize: 21.sp),
+                                    ),
+                                    SizedBox(height: 20.h),
+                                    Text(
+                                      "Bottom",
+                                      style: TextStyle(
+                                          color: Color(0xff757575),
+                                          fontSize: 19.sp),
+                                    ),
+                                    SizedBox(height: 10.h),
+                                    Text(
+                                      "${e.bottom_1}, ${e.bottom_1}",
+                                      style: TextStyle(
+                                          color: Colors.black, fontSize: 21.sp),
+                                    ),
+                                    SizedBox(height: 20.h),
+                                    Text(
+                                      "Knee",
+                                      style: TextStyle(
+                                          color: Color(0xff757575),
+                                          fontSize: 19.sp),
+                                    ),
+                                    SizedBox(height: 10.h),
+                                    Text(
+                                      "${e.knee_1}, ${e.knee_2}",
+                                      style: TextStyle(
+                                          color: Colors.black, fontSize: 21.sp),
+                                    ),
+                                    SizedBox(height: 20.h),
+                                    Text(
+                                      "Thigh",
+                                      style: TextStyle(
+                                          color: Color(0xff757575),
+                                          fontSize: 19.sp),
+                                    ),
+                                    SizedBox(height: 10.h),
+                                    Text(
+                                      "${e.thigh_1}, ${e.thigh_2}",
+                                      style: TextStyle(
+                                          color: Colors.black, fontSize: 21.sp),
+                                    ),
+                                    SizedBox(height: 20.h),
+                                    Text(
+                                      "Waist",
+                                      style: TextStyle(
+                                          color: Color(0xff757575),
+                                          fontSize: 19.sp),
+                                    ),
+                                    SizedBox(height: 10.h),
+                                    Text(
+                                      "${e.waist_1}, ${e.waist_2}",
+                                      style: TextStyle(
+                                          color: Colors.black, fontSize: 21.sp),
+                                    ),
+                                    SizedBox(height: 20.h),
+                                    Text(
+                                      "Bottom hips",
+                                      style: TextStyle(
+                                          color: Color(0xff757575),
+                                          fontSize: 19.sp),
+                                    ),
+                                    SizedBox(height: 10.h),
+                                    Text(
+                                      "${e.bottom_hips}",
+                                      style: TextStyle(
+                                          color: Colors.black, fontSize: 21.sp),
+                                    ),
+                                    SizedBox(height: 20.h),
+                                    Text(
+                                      "Other Detail",
+                                      style: TextStyle(
+                                          color: Color(0xff757575),
+                                          fontSize: 19.sp),
+                                    ),
+                                    SizedBox(height: 10.h),
+                                    Text(
+                                      "${e.other_detail}",
+                                      style: TextStyle(
+                                          color: Colors.black, fontSize: 21.sp),
+                                    ),
+                                    SizedBox(height: 20.h),
+                                    Text(
+                                      "Quantity",
+                                      style: TextStyle(
+                                          color: Color(0xff757575),
+                                          fontSize: 19.sp),
+                                    ),
+                                    SizedBox(height: 10.h),
+                                    Text(
+                                      "${e.qty}",
+                                      style: TextStyle(
+                                          color: Colors.black, fontSize: 21.sp),
+                                    ),
+                                    SizedBox(height: 20.h),
+                                    Text(
+                                      "Delivery Date",
+                                      style: TextStyle(
+                                          color: Color(0xff757575),
+                                          fontSize: 19.sp),
+                                    ),
+                                    SizedBox(height: 10.h),
+                                    Text(
+                                      "${e.delivery_date}",
+                                      style: TextStyle(
+                                          color: Colors.black, fontSize: 21.sp),
+                                    ),
+                                    SizedBox(height: 30.h),
+                                    Divider(thickness: 2),
+                                  ],
+                                )
+                              : Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    SizedBox(height: 20.h),
+                                    Text(
+                                      e.product_name,
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 21.sp,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    SizedBox(height: 20.h),
+                                    Text(
+                                      "Pattern",
+                                      style: TextStyle(
+                                          color: Color(0xff757575),
+                                          fontSize: 19.sp),
+                                    ),
+                                    SizedBox(height: 10.h),
+                                    Text(
+                                      e.pattern_name,
+                                      style: TextStyle(
+                                          color: Colors.black, fontSize: 21.sp),
+                                    ),
+                                    SizedBox(height: 20.h),
+                                    Text(
+                                      "Length",
+                                      style: TextStyle(
+                                          color: Color(0xff757575),
+                                          fontSize: 19.sp),
+                                    ),
+                                    SizedBox(height: 10.h),
+                                    Text(
+                                      "${e.length},",
+                                      style: TextStyle(
+                                          color: Colors.black, fontSize: 21.sp),
+                                    ),
+                                    SizedBox(height: 20.h),
+                                    Text(
+                                      "Sholder",
+                                      style: TextStyle(
+                                          color: Color(0xff757575),
+                                          fontSize: 19.sp),
+                                    ),
+                                    SizedBox(height: 10.h),
+                                    Text(
+                                      "${e.sholder},",
+                                      style: TextStyle(
+                                          color: Colors.black, fontSize: 21.sp),
+                                    ),
+                                    SizedBox(height: 20.h),
+                                    Text(
+                                      "Sleeve Length",
+                                      style: TextStyle(
+                                          color: Color(0xff757575),
+                                          fontSize: 19.sp),
+                                    ),
+                                    SizedBox(height: 10.h),
+                                    Text(
+                                      "${e.sleeve_length_1}, ${e.sleeve_length_2}, ${e.sleeve_length_3}",
+                                      style: TextStyle(
+                                          color: Colors.black, fontSize: 21.sp),
+                                    ),
+                                    SizedBox(height: 20.h),
+                                    Text(
+                                      "Chest",
+                                      style: TextStyle(
+                                          color: Color(0xff757575),
+                                          fontSize: 19.sp),
+                                    ),
+                                    SizedBox(height: 10.h),
+                                    Text(
+                                      "${e.chest_1}, ${e.chest_2},",
+                                      style: TextStyle(
+                                          color: Colors.black, fontSize: 21.sp),
+                                    ),
+                                    SizedBox(height: 20.h),
+                                    Text(
+                                      "Stomach",
+                                      style: TextStyle(
+                                          color: Color(0xff757575),
+                                          fontSize: 19.sp),
+                                    ),
+                                    SizedBox(height: 10.h),
+                                    Text(
+                                      "${e.stomach_1}, ${e.stomach_2},",
+                                      style: TextStyle(
+                                          color: Colors.black, fontSize: 21.sp),
+                                    ),
+                                    SizedBox(height: 20.h),
+                                    Text(
+                                      "Hips",
+                                      style: TextStyle(
+                                          color: Color(0xff757575),
+                                          fontSize: 19.sp),
+                                    ),
+                                    SizedBox(height: 10.h),
+                                    Text(
+                                      "${e.hips_1}, ${e.hips_2},",
+                                      style: TextStyle(
+                                          color: Colors.black, fontSize: 21.sp),
+                                    ),
+                                    SizedBox(height: 20.h),
+                                    Text(
+                                      "Neck",
+                                      style: TextStyle(
+                                          color: Color(0xff757575),
+                                          fontSize: 19.sp),
+                                    ),
+                                    SizedBox(height: 10.h),
+                                    Text(
+                                      "${e.neck_1}, ${e.neck_2},",
+                                      style: TextStyle(
+                                          color: Colors.black, fontSize: 21.sp),
+                                    ),
+                                    SizedBox(height: 20.h),
+                                    Text(
+                                      "Bottom length",
+                                      style: TextStyle(
+                                          color: Color(0xff757575),
+                                          fontSize: 19.sp),
+                                    ),
+                                    SizedBox(height: 10.h),
+                                    Text(
+                                      "${e.bottom_len}",
+                                      style: TextStyle(
+                                          color: Colors.black, fontSize: 21.sp),
+                                    ),
+                                    SizedBox(height: 20.h),
+                                    Text(
+                                      "Bottom half form length",
+                                      style: TextStyle(
+                                          color: Color(0xff757575),
+                                          fontSize: 19.sp),
+                                    ),
+                                    SizedBox(height: 10.h),
+                                    Text(
+                                      "${e.bottm_half_form_len_1}, ${e.bottm_half_form_len_2}",
+                                      style: TextStyle(
+                                          color: Colors.black, fontSize: 21.sp),
+                                    ),
+                                    SizedBox(height: 20.h),
+                                    Text(
+                                      "Bottom",
+                                      style: TextStyle(
+                                          color: Color(0xff757575),
+                                          fontSize: 19.sp),
+                                    ),
+                                    SizedBox(height: 10.h),
+                                    Text(
+                                      "${e.bottom_1}, ${e.bottom_1}",
+                                      style: TextStyle(
+                                          color: Colors.black, fontSize: 21.sp),
+                                    ),
+                                    SizedBox(height: 20.h),
+                                    Text(
+                                      "Knee",
+                                      style: TextStyle(
+                                          color: Color(0xff757575),
+                                          fontSize: 19.sp),
+                                    ),
+                                    SizedBox(height: 10.h),
+                                    Text(
+                                      "${e.knee_1}, ${e.knee_2}",
+                                      style: TextStyle(
+                                          color: Colors.black, fontSize: 21.sp),
+                                    ),
+                                    SizedBox(height: 20.h),
+                                    Text(
+                                      "Thigh",
+                                      style: TextStyle(
+                                          color: Color(0xff757575),
+                                          fontSize: 19.sp),
+                                    ),
+                                    SizedBox(height: 10.h),
+                                    Text(
+                                      "${e.thigh_1}, ${e.thigh_2}",
+                                      style: TextStyle(
+                                          color: Colors.black, fontSize: 21.sp),
+                                    ),
+                                    SizedBox(height: 20.h),
+                                    Text(
+                                      "Waist",
+                                      style: TextStyle(
+                                          color: Color(0xff757575),
+                                          fontSize: 19.sp),
+                                    ),
+                                    SizedBox(height: 10.h),
+                                    Text(
+                                      "${e.waist_1}, ${e.waist_2}",
+                                      style: TextStyle(
+                                          color: Colors.black, fontSize: 21.sp),
+                                    ),
+                                    SizedBox(height: 20.h),
+                                    Text(
+                                      "Bottom hips",
+                                      style: TextStyle(
+                                          color: Color(0xff757575),
+                                          fontSize: 19.sp),
+                                    ),
+                                    SizedBox(height: 10.h),
+                                    Text(
+                                      "${e.bottom_hips}",
+                                      style: TextStyle(
+                                          color: Colors.black, fontSize: 21.sp),
+                                    ),
+                                    SizedBox(height: 20.h),
+                                    Text(
+                                      "Other Detail",
+                                      style: TextStyle(
+                                          color: Color(0xff757575),
+                                          fontSize: 19.sp),
+                                    ),
+                                    SizedBox(height: 10.h),
+                                    Text(
+                                      "${e.other_detail}",
+                                      style: TextStyle(
+                                          color: Colors.black, fontSize: 21.sp),
+                                    ),
+                                    SizedBox(height: 20.h),
+                                    Text(
+                                      "Quantity",
+                                      style: TextStyle(
+                                          color: Color(0xff757575),
+                                          fontSize: 19.sp),
+                                    ),
+                                    SizedBox(height: 10.h),
+                                    Text(
+                                      "${e.qty}",
+                                      style: TextStyle(
+                                          color: Colors.black, fontSize: 21.sp),
+                                    ),
+                                    SizedBox(height: 20.h),
+                                    Text(
+                                      "Delivery Date",
+                                      style: TextStyle(
+                                          color: Color(0xff757575),
+                                          fontSize: 19.sp),
+                                    ),
+                                    SizedBox(height: 10.h),
+                                    Text(
+                                      "${e.delivery_date}",
+                                      style: TextStyle(
+                                          color: Colors.black, fontSize: 21.sp),
+                                    ),
+                                    SizedBox(height: 30.h),
+                                    Divider(thickness: 2),
+                                  ],
+                                );
                     }).toList(),
                   ],
                 ),

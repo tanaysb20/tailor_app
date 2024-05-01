@@ -1,9 +1,12 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
+import 'package:multi_dropdown/multiselect_dropdown.dart';
 import 'package:provider/provider.dart';
-import 'package:tailor_app/Modals/city_modal.dart';
+import 'package:tailor_app/Modals/pattern_modal.dart';
 import 'package:tailor_app/Modals/product_modal.dart';
 import 'package:tailor_app/Providers/home_provider.dart';
 import 'package:tailor_app/Reusable%20components/custom_button.dart';
@@ -41,13 +44,15 @@ class _AddCustomerScreenState extends State<AddOrderScreen> {
   TextEditingController cityController = TextEditingController();
   String deliveryDate = "";
   bool loading = false;
+  bool show = false;
 
-  List<String> productType = [
-    "Top",
-    "Bottom",
-    "Both",
-  ];
+  //// Inputs
 
+  ProductModal selectedProduct = ProductModal(id: "", name: "", type: "");
+
+  List<ValueItem<dynamic>> selectedPattern = [];
+
+  /////
   void clear() {
     save = true;
 
@@ -70,6 +75,7 @@ class _AddCustomerScreenState extends State<AddOrderScreen> {
   @override
   Widget build(BuildContext context) {
     final item = Provider.of<HomeProvider>(context, listen: false);
+    log("${selectedPattern.length} selected");
     return loading
         ? Center(
             child: CircularProgressIndicator(),
@@ -111,13 +117,14 @@ class _AddCustomerScreenState extends State<AddOrderScreen> {
                     children: [
                       SizedBox(height: 25.h),
                       Container(
-                        height: 80.h,
                         margin: EdgeInsets.only(left: 5.w, bottom: 20.h),
                         child: DropdownInput(
                           isMargin: false,
-                          controller: productController,
 
-                          value: "Select Product",
+                          value: selectedProduct.name.isEmpty
+                              ? "Select Product"
+                              : selectedProduct.name,
+
                           // value: consajda.value.text,
 
                           isEnabled: true,
@@ -128,100 +135,62 @@ class _AddCustomerScreenState extends State<AddOrderScreen> {
                               child: Text(value.name),
                             );
                           }).toList(),
-                          onChanged: (value) {
+
+                          onChanged: (value) async {
                             print(value);
+                            ProductModal selectproduct = item.productList
+                                .firstWhere((element) => element.id == value);
+
+                            selectedProduct = selectproduct;
+                            setState(() {
+                              loading = true;
+                            });
+                            await item.getPatterns(value);
+                            setState(() {
+                              loading = false;
+                            });
+                            show = true;
                             // print("$value vauejnka");
 
                             setState(() {});
                           },
                         ),
                       ),
-                      Container(
-                        height: 80.h,
-                        margin: EdgeInsets.only(left: 5.w, bottom: 20.h),
-                        child: DropdownInput(
-                          isMargin: false,
-                          controller: patternController,
-
-                          value: "Select Pattern",
-                          // value: consajda.value.text,
-
-                          isEnabled: true,
-                          inputFieldWidth: double.infinity,
-                          items: item.productList.map((ProductModal value) {
-                            return DropdownMenuItem<String>(
-                              value: value.id,
-                              child: Text(value.name),
-                            );
+                      if (show)
+                        MultiSelectDropDown<dynamic>(
+                          onOptionSelected: (selectedOptions) {
+                            selectedPattern = selectedOptions;
+                            setState(() {});
+                          },
+                          options: item.patternList.map((PatternModal value) {
+                            return ValueItem(
+                                label: value.name, value: value.id);
                           }).toList(),
-                          onChanged: (value) {
-                            print(value);
-                            // print("$value vauejnka");
-
-                            setState(() {});
-                          },
+                          selectionType: SelectionType.multi,
+                          borderColor: Color(0xffFF7126),
+                          hint: "Select Pattern",
+                          borderRadius: 8,
+                          focusedBorderColor: Color(0xffFF7126),
+                          hintStyle: textFieldStyle1111(
+                              color: Colors.black, fontSize: 23.sp),
+                          chipConfig: const ChipConfig(wrapType: WrapType.wrap),
+                          dropdownHeight: 300,
+                          optionTextStyle: TextStyle(fontSize: 16.sp),
+                          selectedOptionIcon: const Icon(Icons.check_circle),
                         ),
-                      ),
-                      Container(
-                        height: 80.h,
-                        margin: EdgeInsets.only(left: 5.w, bottom: 20.h),
-                        child: DropdownInput(
-                          isMargin: false,
-                          controller: productTypeController,
-
-                          value: "Select Product Type",
-                          // value: consajda.value.text,
-
-                          isEnabled: true,
-                          inputFieldWidth: double.infinity,
-                          items: productType.map((String value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(value),
-                            );
-                          }).toList(),
-                          onChanged: (value) {
-                            productTypeController =
-                                TextEditingController(text: value);
-                            print(value);
-                            // print("$value vauejnka");
-
-                            setState(() {});
-                          },
-                        ),
-                      ),
-
-                      // Container(
-                      //   height: 80.h,
-                      //   margin: EdgeInsets.only(bottom: 20.h),
-                      //   child: DropdownInput(
-                      //     isMargin: false,
-                      //     controller: cityController,
-
-                      //     value: "Select City",
-                      //     isEnabled: true,
-                      //     // value: consajda.value.text,
-
-                      //     inputFieldWidth: double.infinity,
-                      //     items: item.cityList.map((CityModal value) {
-                      //       return DropdownMenuItem<String>(
-                      //         value: value.cityName,
-                      //         child: Text(value.cityName),
-                      //       );
-                      //     }).toList(),
-                      //     onChanged: (value) {
-                      //       print(value + "vallluuee");
-                      //       cityController = TextEditingController(text: value);
-                      //       // print("$value vauejnka");
-
-                      //       setState(() {});
-                      //     },
-                      //   ),
-                      // ),
-
-                      if (productTypeController.value.text == "Top")
+                      SizedBox(height: 40.h),
+                      if (selectedProduct.type == "1")
                         Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            Text(
+                              "Top Measurement",
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 21.sp,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(height: 20.h),
                             Row(
                               children: [
                                 Expanded(
@@ -536,9 +505,18 @@ class _AddCustomerScreenState extends State<AddOrderScreen> {
                             SizedBox(height: 15.h),
                           ],
                         ),
-                      if (productTypeController.value.text == "Bottom")
+                      if (selectedProduct.type == "2")
                         Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            Text(
+                              "Bottom Measurement",
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 21.sp,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(height: 20.h),
                             Row(
                               children: [
                                 Expanded(
@@ -837,9 +815,18 @@ class _AddCustomerScreenState extends State<AddOrderScreen> {
                             SizedBox(height: 15.h),
                           ],
                         ),
-                      if (productTypeController.value.text == "Both")
+                      if (selectedProduct.type == "3")
                         Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            Text(
+                              "Top Measurement",
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 21.sp,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(height: 20.h),
                             Row(
                               children: [
                                 Expanded(
@@ -854,7 +841,7 @@ class _AddCustomerScreenState extends State<AddOrderScreen> {
                                       return null;
                                     },
                                     txKeyboardType: TextInputType.number,
-                                    hintText: "Bottom half form length 1",
+                                    hintText: "length",
                                   ),
                                 ),
                                 SizedBox(width: 10.w),
@@ -870,7 +857,7 @@ class _AddCustomerScreenState extends State<AddOrderScreen> {
                                       return null;
                                     },
                                     txKeyboardType: TextInputType.number,
-                                    hintText: "Bottom half form length 2",
+                                    hintText: "sholder",
                                   ),
                                 ),
                               ],
@@ -890,7 +877,7 @@ class _AddCustomerScreenState extends State<AddOrderScreen> {
                                       return null;
                                     },
                                     txKeyboardType: TextInputType.number,
-                                    hintText: "Bottom 1",
+                                    hintText: "sleeve length 1",
                                   ),
                                 ),
                                 SizedBox(width: 10.w),
@@ -906,7 +893,7 @@ class _AddCustomerScreenState extends State<AddOrderScreen> {
                                       return null;
                                     },
                                     txKeyboardType: TextInputType.number,
-                                    hintText: "Bottom 2",
+                                    hintText: "sleeve length 2",
                                   ),
                                 ),
                               ],
@@ -926,7 +913,7 @@ class _AddCustomerScreenState extends State<AddOrderScreen> {
                                       return null;
                                     },
                                     txKeyboardType: TextInputType.number,
-                                    hintText: "Bottom length",
+                                    hintText: "sleeve length 3",
                                   ),
                                 ),
                               ],
@@ -946,7 +933,7 @@ class _AddCustomerScreenState extends State<AddOrderScreen> {
                                       return null;
                                     },
                                     txKeyboardType: TextInputType.number,
-                                    hintText: "Knee 1",
+                                    hintText: "chest 1",
                                   ),
                                 ),
                                 SizedBox(width: 10.w),
@@ -962,7 +949,7 @@ class _AddCustomerScreenState extends State<AddOrderScreen> {
                                       return null;
                                     },
                                     txKeyboardType: TextInputType.number,
-                                    hintText: "Knee 2",
+                                    hintText: "chest 2",
                                   ),
                                 ),
                               ],
@@ -982,7 +969,7 @@ class _AddCustomerScreenState extends State<AddOrderScreen> {
                                       return null;
                                     },
                                     txKeyboardType: TextInputType.number,
-                                    hintText: "Thigh 1",
+                                    hintText: "Stomach 1",
                                   ),
                                 ),
                                 SizedBox(width: 10.w),
@@ -998,7 +985,7 @@ class _AddCustomerScreenState extends State<AddOrderScreen> {
                                       return null;
                                     },
                                     txKeyboardType: TextInputType.number,
-                                    hintText: "Thigh 2",
+                                    hintText: "Stomach 2",
                                   ),
                                 ),
                               ],
@@ -1018,7 +1005,7 @@ class _AddCustomerScreenState extends State<AddOrderScreen> {
                                       return null;
                                     },
                                     txKeyboardType: TextInputType.number,
-                                    hintText: "Waist 1",
+                                    hintText: "Hips 1",
                                   ),
                                 ),
                                 SizedBox(width: 10.w),
@@ -1034,7 +1021,7 @@ class _AddCustomerScreenState extends State<AddOrderScreen> {
                                       return null;
                                     },
                                     txKeyboardType: TextInputType.number,
-                                    hintText: "Waist 2",
+                                    hintText: "Hips 2",
                                   ),
                                 ),
                               ],
@@ -1054,12 +1041,36 @@ class _AddCustomerScreenState extends State<AddOrderScreen> {
                                       return null;
                                     },
                                     txKeyboardType: TextInputType.number,
-                                    hintText: "Bottom hips",
+                                    hintText: "Neck 1",
+                                  ),
+                                ),
+                                SizedBox(width: 10.w),
+                                Expanded(
+                                  child: CustomTextField(
+                                    controller: neck2Controller,
+                                    margin: false,
+                                    textColor: Color.fromARGB(255, 0, 13, 24),
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty) {
+                                        return 'Mobile number can\'t be empty';
+                                      }
+                                      return null;
+                                    },
+                                    txKeyboardType: TextInputType.number,
+                                    hintText: "Neck 2",
                                   ),
                                 ),
                               ],
                             ),
                             SizedBox(height: 15.h),
+                            Text(
+                              "Bottom Measurement",
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 21.sp,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(height: 20.h),
                             Row(
                               children: [
                                 Expanded(

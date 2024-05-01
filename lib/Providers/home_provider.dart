@@ -7,6 +7,7 @@ import 'package:tailor_app/Modals/category_modal.dart';
 import 'package:tailor_app/Modals/city_modal.dart';
 import 'package:tailor_app/Modals/customer_modal.dart';
 import 'package:tailor_app/Modals/item_modal.dart';
+import 'package:tailor_app/Modals/pattern_modal.dart';
 import 'package:tailor_app/Modals/product_item_detail_modal.dart';
 import 'package:tailor_app/Modals/product_modal.dart';
 import 'package:tailor_app/Modals/user_modal.dart';
@@ -28,6 +29,7 @@ class HomeProvider with ChangeNotifier {
   int deliveredOrders = 0;
   int totalCustomer = 0;
   List<ProductItemDetail> selectedProductsItemDetail = [];
+  List<PatternModal> patternList = [];
 
   Future getOrders() async {
     final prefs = await SharedPreferences.getInstance();
@@ -344,6 +346,39 @@ class HomeProvider with ChangeNotifier {
         ));
       });
       selectedProductsItemDetail = demoselectedProductsItemDetail;
+      notifyListeners();
+    } else {
+      print(response.reasonPhrase);
+    }
+  }
+
+  Future getPatterns(String id) async {
+    final prefs = await SharedPreferences.getInstance();
+    var _accessToken = await prefs.getString("userToken");
+    var headers = {'Authorization': 'Bearer $_accessToken'};
+    var request = Request(
+        'GET',
+        Uri.parse(
+            '${UrlHolder.baseUrl}${UrlHolder.patternFilter}/${int.parse(id)}'));
+
+    request.headers.addAll(headers);
+
+    List<PatternModal> demoPatternList = [];
+
+    StreamedResponse response = await request.send();
+
+    if (response.statusCode == 200) {
+      final xyz = await response.stream.bytesToString();
+
+      final List responseData = json.decode(xyz);
+
+      responseData.forEach((element) {
+        return demoPatternList.add(PatternModal(
+          id: element["id"].toString(),
+          name: element["name"] ?? "",
+        ));
+      });
+      patternList = demoPatternList;
       notifyListeners();
     } else {
       print(response.reasonPhrase);
