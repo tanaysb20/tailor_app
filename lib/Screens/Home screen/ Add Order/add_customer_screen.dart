@@ -258,23 +258,23 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
                   child: DropdownInput(
                     isMargin: false,
                     controller: cityController,
-
-                    value: "Select City",
+                    value: cityController.text,
                     isEnabled: true,
                     // value: consajda.value.text,
-
                     inputFieldWidth: double.infinity,
                     items: item.cityNames.map((String value) {
                       return DropdownMenuItem<String>(
                         value: value.toString(),
-                        child: Text(value.toString()),
+                        child: Text(
+                          value.toString(),
+                          style: TextStyle(color: Colors.black),
+                        ),
                       );
                     }).toList(),
                     onChanged: (value) {
                       print(value + "vallluuee");
                       cityController = TextEditingController(text: value);
                       // print("$value vauejnka");
-
                       setState(() {});
                     },
                   ),

@@ -269,9 +269,11 @@ class HomeProvider with ChangeNotifier {
           cityId: element["type"] ?? "",
         ));
       });
+      // log("getting City data");
       responseData.forEach((element) {
+        // log(element.toString());
         return demoCityNames.add(
-          element["name"] ?? "",
+          element["city"] ?? "",
         );
       });
       cityList = demoCityList;
