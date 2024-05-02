@@ -265,8 +265,8 @@ class HomeProvider with ChangeNotifier {
       responseData.forEach((element) {
         return demoCityList.add(CityModal(
           id: element["id"].toString(),
-          cityName: element["name"] ?? "",
-          cityId: element["type"] ?? "",
+          cityName: element["city"] ?? "",
+          cityId: element["state_id"] ?? "",
         ));
       });
       // log("getting City data");
