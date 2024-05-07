@@ -31,7 +31,7 @@ class _OtpScreenState extends State<RelativesScreen>
   ];
 
   final PagingController<int, OrderModal> pagingController =
-  PagingController(firstPageKey: 1);
+      PagingController(firstPageKey: 1);
 
   // List<RelationModal> filterRelativesList = [];
 
@@ -55,8 +55,8 @@ class _OtpScreenState extends State<RelativesScreen>
   Future<void> getOrders(int pageIndex) async {
     print(pageIndex);
     List<OrderModal> orders =
-    await Provider.of<HomeProvider>(context, listen: false)
-        .getOrders(page: pageIndex);
+        await Provider.of<HomeProvider>(context, listen: false)
+            .getOrders(page: pageIndex);
     if (orders.isNotEmpty) {
       // currentPage = currentPage + 1;
       final isLastPage = orders.length < 30;
@@ -82,49 +82,46 @@ class _OtpScreenState extends State<RelativesScreen>
     // final DateFormat formatterDate = DateFormat('MMMM, yyyy');
     return loading
         ? Center(
-        child: CircularProgressIndicator(color: const Color(0xff112951)))
+            child: CircularProgressIndicator(color: const Color(0xff112951)))
         : RefreshIndicator(
-      onRefresh: () async {
-        pagingController.refresh();
-      },
-      child: PagedListView<int, OrderModal>(
-        pagingController: pagingController,
-        builderDelegate: PagedChildBuilderDelegate<OrderModal>(
-            itemBuilder: (context, item, index) {
-              print(index);
-              return Column(
-                children: [
-                  if (index == 0) bodyWidget(),
-                  OrderItem(orderItem: item),
-                ],
-              );
+            onRefresh: () async {
+              pagingController.refresh();
             },
-            firstPageProgressIndicatorBuilder: (_) =>
-                Column(
-                  children: [
-                    bodyWidget(),
-                    Container(
-                      height: 200,
-                      child: Center(
-                        child: CircularProgressIndicator(),
+            child: PagedListView<int, OrderModal>(
+              pagingController: pagingController,
+              builderDelegate: PagedChildBuilderDelegate<OrderModal>(
+                  itemBuilder: (context, item, index) {
+                    print(index);
+                    return Column(
+                      children: [
+                        if (index == 0) bodyWidget(),
+                        OrderItem(orderItem: item),
+                      ],
+                    );
+                  },
+                  firstPageProgressIndicatorBuilder: (_) => Column(
+                        children: [
+                          bodyWidget(),
+                          Container(
+                            height: 200,
+                            child: Center(
+                              child: CircularProgressIndicator(),
+                            ),
+                          )
+                        ],
                       ),
-                    )
-                  ],
-                ),
-            noItemsFoundIndicatorBuilder: (_) =>
-                Column(
-                  children: [bodyWidget()],
-                ),
-            newPageProgressIndicatorBuilder: (_) =>
-                Column(
-                  children: [
-                    Center(
-                      child: CircularProgressIndicator(),
-                    )
-                  ],
-                )),
-      ),
-    );
+                  noItemsFoundIndicatorBuilder: (_) => Column(
+                        children: [bodyWidget()],
+                      ),
+                  newPageProgressIndicatorBuilder: (_) => Column(
+                        children: [
+                          Center(
+                            child: CircularProgressIndicator(),
+                          )
+                        ],
+                      )),
+            ),
+          );
   }
 
   Widget bodyWidget() {
@@ -139,8 +136,7 @@ class _OtpScreenState extends State<RelativesScreen>
             children: [
               Text(
                 "Sort by :",
-                style: textFieldStyle(
-                    fontSize: 18.sp, weight: FontWeight.w500),
+                style: textFieldStyle(fontSize: 18.sp, weight: FontWeight.w500),
               ),
               SizedBox(width: 10.w),
               Container(

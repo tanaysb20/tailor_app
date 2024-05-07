@@ -8,10 +8,12 @@ class CustomerModal {
   String created_at;
   String order_count;
   String city;
+  String cityname;
   CustomerModal(
       {this.address = "",
       this.avtar = "",
       this.city = "",
+      this.cityname = "",
       this.city_id = "",
       this.created_at = "",
       this.id = "",

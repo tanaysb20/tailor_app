@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:easy_autocomplete/easy_autocomplete.dart';
@@ -29,9 +30,10 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
   TextEditingController customerNameController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
   TextEditingController addressController = TextEditingController();
-  TextEditingController cityController =
-      TextEditingController(text: 'HUBBALLI');
+  TextEditingController cityController = TextEditingController();
   String sendImage = "";
+  String cityId = "";
+  String customerId = "";
   File? showImage;
 
   void clear() {
@@ -39,8 +41,13 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
     customerNameController = TextEditingController();
     phoneController = TextEditingController();
     addressController = TextEditingController();
+    cityController = TextEditingController();
     sendImage = "";
     showImage = null;
+
+    cityId = "";
+    customerId = "";
+
     setState(() {});
   }
 
@@ -233,8 +240,10 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
                           text: selectedCustomer.phone_no);
                       addressController =
                           TextEditingController(text: selectedCustomer.address);
-                      cityController =
-                          TextEditingController(text: selectedCustomer.city);
+                      cityController = TextEditingController(
+                          text: selectedCustomer.cityname);
+                      cityId = selectedCustomer.city_id;
+                      customerId = selectedCustomer.id;
 
                       sendImage =
                           "${UrlHolder.baseUrl}${selectedCustomer.avtar}${selectedCustomer.avtar}";
@@ -254,84 +263,31 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
                 SizedBox(height: 20.h),
                 Container(
                   height: 80.h,
-                  margin: EdgeInsets.only(bottom: 20.h),
                   child: DropdownInput(
                     isMargin: false,
                     controller: cityController,
-                    value: cityController.text,
+                    value: cityController.text.isEmpty
+                        ? "Select City"
+                        : cityController.text,
                     isEnabled: true,
                     // value: consajda.value.text,
                     inputFieldWidth: double.infinity,
-                    items: item.cityNames.map((String value) {
+                    items: item.cityList.map((CityModal value) {
                       return DropdownMenuItem<String>(
-                        value: value.toString(),
+                        value: value.id.toString(),
                         child: Text(
-                          value.toString(),
+                          value.cityName.toString(),
                           style: TextStyle(color: Colors.black),
                         ),
                       );
                     }).toList(),
                     onChanged: (value) {
-                      print(value + "vallluuee");
-                      cityController = TextEditingController(text: value);
-                      // print("$value vauejnka");
+                      log(value + "vallluuee");
+                      cityId = value;
                       setState(() {});
                     },
                   ),
                 ),
-                Container(
-                    margin: EdgeInsets.only(left: 15.w, right: 10.w),
-                    child: EasyAutocomplete(
-                        controller: cityController,
-                        cursorColor: Colors.black,
-                        suggestionTextStyle: TextStyle(fontSize: 18.sp),
-                        // clearOnSubmit: false,
-                        // key: key,
-                        // suggestionsAmount: 20,
-
-                        // style: textFieldStyle(),
-                        inputTextStyle: textFieldStyle(),
-                        decoration: InputDecoration(
-                          filled: true,
-                          fillColor: Colors.white,
-                          contentPadding: EdgeInsets.symmetric(
-                              vertical: 12.h, horizontal: 14.w),
-                          border: OutlineInputBorder(
-                              borderSide: const BorderSide(
-                                color: Colors.black,
-                              ),
-                              borderRadius: BorderRadius.circular(8)),
-                          focusedBorder: OutlineInputBorder(
-                              borderSide: const BorderSide(color: Colors.black),
-                              borderRadius: BorderRadius.circular(8)),
-                          enabledBorder: OutlineInputBorder(
-                              borderSide: const BorderSide(color: Colors.black),
-                              borderRadius: BorderRadius.circular(8)),
-                          hintText: "Pick the location this order is for.",
-                          hintStyle: textFieldStyle(isHint: true),
-                        ),
-                        suggestions: item.cityNames,
-                        // submitOnSuggestionTap: true,
-                        //   onFieldSubmitted: (text) {
-                        //     createOrderViewModel.changeFocusNode(
-                        //         context, createOrderViewModel.monthNode);
-                        //     setState(() {});
-                        //   },
-                        // textChanged: (text) {},
-                        // clearOnSubmit: true,
-                        onSubmitted: (text) {
-                          print(text);
-                          // LocationModal txselectLocation =
-                          //     itemOrder.locationList.firstWhere((element) =>
-                          //         element.project!.contains(text));
-                          // selectedLocation = txselectLocation;
-
-                          // createOrderViewModel.changeFocusNode(
-                          //     context, createOrderViewModel.monthNode);
-
-                          // setState(() {});
-                        })),
-                SizedBox(height: 20.h),
                 CustomTextField(
                   controller: phoneController,
                   isEnabled: save ? true : false,
@@ -349,7 +305,7 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
                   },
                   txKeyboardType: TextInputType.number,
                 ),
-                SizedBox(height: 20.h),
+                SizedBox(height: 10.h),
                 CustomTextField(
                   controller: addressController,
                   isEnabled: save ? true : false,
@@ -372,27 +328,33 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
                       check: true,
                       bgcolor: Color(0xffFF7126),
                       fun: () async {
-                        if (showImage == null && save) {
-                          EasyLoading.showToast("Image can't be empty",
-                              maskType: EasyLoadingMaskType.black);
-                        } else {
-                          if (_formKey.currentState!.validate()) {
-                            if (save) {}
-
-                            EasyLoading.show(
-                                maskType: EasyLoadingMaskType.black);
-
-                            // bool check = await item.sendOtp(
-                            //     mobileNumberController.value.text,
-                            //     passwordController.value.text);
+                        if (_formKey.currentState!.validate()) {
+                          EasyLoading.show(maskType: EasyLoadingMaskType.black);
+                          bool check = await item.addCustomerAndOrder(
+                            address: addressController.value.text,
+                            cityId: cityId,
+                            customerId: customerId,
+                            customerName: customerNameController.value.text,
+                            phoneNo: phoneController.value.text,
+                          );
+                          EasyLoading.dismiss();
+                          if (check) {
                             EasyLoading.dismiss();
-                            //   if (check) {
                             Navigator.of(context).push(MaterialPageRoute(
                               builder: (context) {
                                 return AddOrderScreen();
                               },
                             ));
+                          } else {
+                            EasyLoading.dismiss();
                           }
+
+                          // bool check = await item.sendOtp(
+                          //     mobileNumberController.value.text,
+                          //     passwordController.value.text);
+
+                          //   if (check) {
+
                           // } else {}
                         }
                       },

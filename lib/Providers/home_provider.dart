@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
+import 'package:multi_dropdown/multiselect_dropdown.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tailor_app/Modals/category_modal.dart';
 import 'package:tailor_app/Modals/city_modal.dart';
@@ -11,6 +12,8 @@ import 'package:tailor_app/Modals/pattern_modal.dart';
 import 'package:tailor_app/Modals/product_item_detail_modal.dart';
 import 'package:tailor_app/Modals/product_modal.dart';
 import 'package:tailor_app/Modals/user_modal.dart';
+import 'package:tailor_app/Reusable%20components/app_bar.dart';
+import 'package:tailor_app/Screens/Home%20screen/%20Add%20Order/add_order_screen.dart';
 import 'package:tailor_app/Urls/url_holder_loan.dart';
 
 class HomeProvider with ChangeNotifier {
@@ -30,6 +33,9 @@ class HomeProvider with ChangeNotifier {
   int totalCustomer = 0;
   List<ProductItemDetail> selectedProductsItemDetail = [];
   List<PatternModal> patternList = [];
+  String orderId = "";
+  String orderNumber = "";
+  List<AddOrderModal> addOrderItemList = [];
 
   Future<List<OrderModal>> getOrders(
       {int pageCount = 30, required int page}) async {
@@ -74,7 +80,8 @@ class HomeProvider with ChangeNotifier {
     }
   }
 
-  Future getCustomer(int page) async {
+  Future<List<CustomerModal>> getCustomer(
+      {int pageCount = 30, required int page}) async {
     log("$page");
     final prefs = await SharedPreferences.getInstance();
     var _accessToken = await prefs.getString("userToken");
@@ -101,6 +108,7 @@ class HomeProvider with ChangeNotifier {
           city_id: element["city_id"] ?? "",
           created_at: element["created_at"] ?? "",
           avtar: element["avtar"] ?? "",
+          cityname: element["city"]["city"],
           name: element["name"] ?? "",
           order_count: element["order_count"] ?? "",
           phone_no: element["phone_no"] ?? "",
@@ -110,8 +118,10 @@ class HomeProvider with ChangeNotifier {
       lastPage = txlastPage;
 
       notifyListeners();
+      return customerList;
     } else {
       print(response.reasonPhrase);
+      return customerList;
     }
 
     // var request = Request(
@@ -384,6 +394,154 @@ class HomeProvider with ChangeNotifier {
       });
       patternList = demoPatternList;
       notifyListeners();
+    } else {
+      print(response.reasonPhrase);
+    }
+  }
+
+  Future<bool> addCustomerAndOrder(
+      {String customerId = "",
+      String customerName = "",
+      String phoneNo = "",
+      String cityId = "",
+      String address = ""}) async {
+    log("$customerId cehcknigng");
+    log("$customerName cehcknigng");
+    log("$phoneNo cehcknigng");
+    log("$cityId cehcknigng");
+    log("$address cehcknigng");
+    final prefs = await SharedPreferences.getInstance();
+    var _accessToken = await prefs.getString("userToken");
+    var headers = {'Authorization': 'Bearer $_accessToken'};
+    var request = MultipartRequest(
+        'POST', Uri.parse('${UrlHolder.baseUrl}${UrlHolder.orderAdd}'));
+    request.fields.addAll({
+      'customer_name': customerName,
+      'phone_no': phoneNo,
+      'address': address,
+      'city_id': cityId,
+      'customer_id': customerId
+    });
+
+    request.headers.addAll(headers);
+
+    StreamedResponse response = await request.send();
+
+    if (response.statusCode == 200) {
+      final xyz = await response.stream.bytesToString();
+
+      print("object success");
+
+      final responseData = json.decode(xyz);
+      // log("${response.stream.bytesToString()}");
+      orderId = responseData["order_detail"]["order_id"].toString();
+      orderNumber = responseData["order_detail"]["order_no"] ?? "";
+      notifyListeners();
+      return true;
+    } else {
+      final xyz = await response.stream.bytesToString();
+      final responseData = json.decode(xyz)["errors"]["address"][0];
+      log("${xyz}");
+      message(responseData.toString());
+      return false;
+    }
+  }
+
+  void increaseOrder() {
+    addOrderItemList.add(AddOrderModal(
+        selectedProduct: ProductModal(id: "", name: "", type: ""),
+        patternList: [],
+        patternController: MultiSelectController(),
+        bottom1: TextEditingController(),
+        bottom2: TextEditingController(),
+        bottomHalfLength1: TextEditingController(),
+        bottomHalfLength2: TextEditingController(),
+        bottomhips: TextEditingController(),
+        bottomlength: TextEditingController(),
+        chest1Controller: TextEditingController(),
+        chest2Controller: TextEditingController(),
+        cityController: TextEditingController(),
+        detailsController: TextEditingController(),
+        hips1Controller: TextEditingController(),
+        hips2Controller: TextEditingController(),
+        knee1: TextEditingController(),
+        knee2: TextEditingController(),
+        lengthController: TextEditingController(),
+        neck1Controller: TextEditingController(),
+        neck2Controller: TextEditingController(),
+        qtyController: TextEditingController(),
+        seleeveLength1Controller: TextEditingController(),
+        seleeveLength2Controller: TextEditingController(),
+        seleeveLength3Controller: TextEditingController(),
+        shoulderController: TextEditingController(),
+        stomach1Controller: TextEditingController(),
+        thigh1: TextEditingController(),
+        stomach2Controller: TextEditingController(),
+        waist1: TextEditingController(),
+        thigh2: TextEditingController(),
+        waist2: TextEditingController(),
+        selectedPattern: [],
+        id: DateTime.now().toString()));
+    notifyListeners();
+  }
+
+  void deleteOrder(String id) {
+    addOrderItemList.removeWhere((element) => element.id == id);
+    notifyListeners();
+  }
+
+  Future addOrder(String orderId, String bill_no) async {
+    final prefs = await SharedPreferences.getInstance();
+    var _accessToken = await prefs.getString("userToken");
+    var headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $_accessToken'
+    };
+
+    var request = Request('POST',
+        Uri.parse('${UrlHolder.baseUrl}${UrlHolder.addOrderItem}/$orderId'));
+    request.body = json.encode({
+      "order_id": orderId,
+      "bill_no": bill_no,
+      "products": addOrderItemList.map((e) => {
+            "product_id": e.selectedProduct.id,
+            "pattern_id": e.selectedPattern?.map((e) => e.value).toList(),
+            "length": e.lengthController?.value.text ?? "",
+            "sholder": e.shoulderController?.value.text ?? "",
+            "sleeve_length_1": e.seleeveLength1Controller?.value.text ?? "",
+            "sleeve_length_2": e.seleeveLength2Controller?.value.text ?? "",
+            "sleeve_length_3": e.seleeveLength3Controller?.value.text ?? "",
+            "chest_1": e.chest1Controller?.value.text ?? "",
+            "chest_2": e.chest2Controller?.value.text ?? "",
+            "stomach_1": e.stomach1Controller?.value.text ?? "",
+            "stomach_2": e.stomach2Controller?.value.text ?? "",
+            "hips_1": e.hips1Controller?.value.text ?? "",
+            "hips_2": e.hips2Controller?.value.text ?? "",
+            "neck_1": e.neck1Controller?.value.text ?? "",
+            "neck_2": e.neck2Controller?.value.text ?? "",
+            "bottom_len": e.bottomlength?.value.text ?? "",
+            "bottm_half_form_len_1": e.bottomHalfLength1?.value.text ?? "",
+            "bottm_half_form_len_2": e.bottomHalfLength2?.value.text ?? "",
+            "bottom_1": e.bottom1?.value.text ?? "",
+            "bottom_2": e.bottom2?.value.text ?? "",
+            "knee_1": e.knee1?.value.text ?? "",
+            "knee_2": e.knee2?.value.text ?? "",
+            "thigh_1": e.thigh1?.value.text ?? "",
+            "thigh_2": e.thigh2?.value.text ?? "",
+            "waist_1": e.waist1?.value.text ?? "",
+            "waist_2": e.waist2?.value.text ?? "",
+            "bottom_hips": e.bottomhips?.value.text ?? "",
+            "other_detail": e.detailsController?.value.text ?? "",
+            "qty": e.qtyController?.value.text ?? "",
+            "delivery_date": e.detailsController?.value.text ?? "",
+          })
+    });
+    request.headers.addAll(headers);
+
+    StreamedResponse response = await request.send();
+
+    if (response.statusCode == 200) {
+      print(await response.stream.bytesToString());
     } else {
       print(response.reasonPhrase);
     }
