@@ -498,14 +498,20 @@ class HomeProvider with ChangeNotifier {
       'Authorization': 'Bearer $_accessToken'
     };
 
+    List<AddOrderModal> finalAddOrderItemList = addOrderItemList
+        .where((element) => element.selectedProduct.id.isNotEmpty)
+        .toList();
+
     var request = Request('POST',
         Uri.parse('${UrlHolder.baseUrl}${UrlHolder.addOrderItem}/$orderId'));
     request.body = json.encode({
       "order_id": orderId,
       "bill_no": bill_no,
-      "products": addOrderItemList.map((e) => {
+      "products": finalAddOrderItemList.map((e) => {
             "product_id": e.selectedProduct.id,
-            "pattern_id": e.selectedPattern?.map((e) => e.value).toList(),
+            "pattern_id": e.selectedPattern.isEmpty
+                ? []
+                : e.selectedPattern.map((e) => e.value).toList(),
             "length": e.lengthController?.value.text ?? "",
             "sholder": e.shoulderController?.value.text ?? "",
             "sleeve_length_1": e.seleeveLength1Controller?.value.text ?? "",

@@ -215,7 +215,7 @@ class _AddCustomerScreenState extends State<AddOrderScreen> {
                               MultiSelectDropDown<dynamic>(
                                 controller: e.patternController,
                                 onOptionSelected: (selectedOptions) {
-                                  log("${e.selectedPattern?.length}");
+                                  log("${e.selectedPattern.length}");
                                   e.selectedPattern = selectedOptions;
                                   setState(() {});
                                 },
@@ -1535,7 +1535,7 @@ class AddOrderModal {
   List<PatternModal>? patternList = [];
   MultiSelectController<dynamic>? patternController;
 
-  List<ValueItem<dynamic>>? selectedPattern;
+  List<ValueItem<dynamic>> selectedPattern = [];
   TextEditingController? lengthController;
   TextEditingController? shoulderController;
 
@@ -1589,7 +1589,7 @@ class AddOrderModal {
     this.lengthController,
     this.neck2Controller,
     this.qtyController,
-    this.selectedPattern,
+    required this.selectedPattern,
     required this.selectedProduct,
     this.seleeveLength1Controller,
     this.seleeveLength2Controller,
