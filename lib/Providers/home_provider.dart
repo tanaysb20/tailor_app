@@ -501,6 +501,7 @@ class HomeProvider with ChangeNotifier {
     List<AddOrderModal> finalAddOrderItemList = addOrderItemList
         .where((element) => element.selectedProduct.id.isNotEmpty)
         .toList();
+    print(finalAddOrderItemList.length);
 
     var request = Request('POST',
         Uri.parse('${UrlHolder.baseUrl}${UrlHolder.addOrderItem}/$orderId'));
