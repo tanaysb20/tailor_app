@@ -4,6 +4,7 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:provider/provider.dart';
 import 'package:tailor_app/Modals/user_modal.dart';
 import 'package:tailor_app/Providers/home_provider.dart';
+import 'package:tailor_app/Reusable%20components/debouncer.dart';
 import 'package:tailor_app/Reusable%20components/dropdown.dart';
 import 'package:tailor_app/Reusable%20components/order_item.dart';
 import 'package:tailor_app/Reusable%20components/text_field.dart';
@@ -32,8 +33,7 @@ class _OtpScreenState extends State<RelativesScreen>
 
   final PagingController<int, OrderModal> pagingController =
       PagingController(firstPageKey: 1);
-
-  // List<RelationModal> filterRelativesList = [];
+  final _debouncer = Debouncer(milliseconds: 900);
 
   @override
   void initState() {
@@ -53,10 +53,18 @@ class _OtpScreenState extends State<RelativesScreen>
   }
 
   Future<void> getOrders(int pageIndex) async {
-    print(pageIndex);
+    print((relativesList.indexWhere(
+                    (element) => sortDropDownController.text == element) +
+                1)
+            .toString() +
+        "a");
     List<OrderModal> orders =
-        await Provider.of<HomeProvider>(context, listen: false)
-            .getOrders(page: pageIndex);
+        await Provider.of<HomeProvider>(context, listen: false).getOrders(
+            page: pageIndex,
+            filter: (relativesList.indexWhere(
+                        (element) => sortDropDownController.text == element) +
+                    1)
+                .toString());
     if (orders.isNotEmpty) {
       // currentPage = currentPage + 1;
       final isLastPage = orders.length < 30;
@@ -66,6 +74,8 @@ class _OtpScreenState extends State<RelativesScreen>
         final nextPageKey = pageIndex + 1;
         pagingController.appendPage(orders, nextPageKey);
       }
+    } else {
+      pagingController.appendLastPage(orders ?? []);
     }
     loading = false;
   }
@@ -170,7 +180,11 @@ class _OtpScreenState extends State<RelativesScreen>
                   }).toList(),
 
                   onChanged: (value) {
+                    sortDropDownController.text = value;
                     setState(() {});
+                    _debouncer.run(() {
+                      pagingController.refresh();
+                    });
                   },
                 ),
               ),

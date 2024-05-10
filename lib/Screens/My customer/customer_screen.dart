@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:tailor_app/Modals/customer_modal.dart';
 import 'package:tailor_app/Providers/home_provider.dart';
 import 'package:tailor_app/Reusable%20components/customer_item.dart';
+import 'package:tailor_app/Reusable%20components/debouncer.dart';
 import 'package:tailor_app/Reusable%20components/text_field.dart';
 
 class CustomerScreen extends StatefulWidget {
@@ -22,12 +23,14 @@ class _OtpScreenState extends State<CustomerScreen>
   int currentIndexx = 0;
   int tab = 1;
   int page = 1;
-
+  TextEditingController search = TextEditingController();
   DateTime? selectedDate;
   bool loading = false;
 
   final PagingController<int, CustomerModal> pagingController =
       PagingController(firstPageKey: 1);
+
+  final _debouncer = Debouncer(milliseconds: 900);
 
   @override
   void initState() {
@@ -42,7 +45,7 @@ class _OtpScreenState extends State<CustomerScreen>
   Future start(int pageIndex) async {
     List<CustomerModal> orders =
         await Provider.of<HomeProvider>(context, listen: false)
-            .getCustomer(page: pageIndex);
+            .getCustomer(page: pageIndex, search: search.text);
     if (orders.isNotEmpty) {
       // currentPage = currentPage + 1;
       final isLastPage = orders.length < 30;
@@ -52,6 +55,8 @@ class _OtpScreenState extends State<CustomerScreen>
         final nextPageKey = pageIndex + 1;
         pagingController.appendPage(orders, nextPageKey);
       }
+    } else {
+      pagingController.appendLastPage(orders ?? []);
     }
     loading = false;
   }
@@ -103,49 +108,54 @@ class _OtpScreenState extends State<CustomerScreen>
                     )),
           );
   }
-}
 
-Widget bodyWidget(BuildContext context) {
-  final item = Provider.of<HomeProvider>(context, listen: false);
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      SizedBox(height: 30.h),
-      // item.trasactionList.isEmpty?
-      // Padding(
-      //   padding:  EdgeInsets.symmetric(vertical:  150.0.h),
-      //   child: Center(child: Text("No Transaction Yet",
-      //     style: textFieldStyle(
-      //         fontSize: 24.sp,
-      //         color: const Color(0xff112951),
-      //         weight: FontWeight.w800)),),
-      // ):
+  Widget bodyWidget(BuildContext context) {
+    final item = Provider.of<HomeProvider>(context, listen: false);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SizedBox(height: 30.h),
+        // item.trasactionList.isEmpty?
+        // Padding(
+        //   padding:  EdgeInsets.symmetric(vertical:  150.0.h),
+        //   child: Center(child: Text("No Transaction Yet",
+        //     style: textFieldStyle(
+        //         fontSize: 24.sp,
+        //         color: const Color(0xff112951),
+        //         weight: FontWeight.w800)),),
+        // ):
 
-      Padding(
-        padding: EdgeInsets.symmetric(horizontal: 12.0.w),
-        child: CustomTextField(
-            prefixIcon: true,
-            onChanged: (value) {},
-            margin: false,
-            hintText: "Search by Name or Mobile No."),
-      ),
-      SizedBox(height: 20.h),
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 12.0.w),
+          child: CustomTextField(
+              prefixIcon: true,
+              controller: search,
+              onChanged: (value) {
+                _debouncer.run(() {
+                  pagingController.refresh();
+                });
+              },
+              margin: false,
+              hintText: "Search by Name or Mobile No."),
+        ),
+        SizedBox(height: 20.h),
 
-      // filterCustomerList.isEmpty
-      //     ? Text("Customer list is empty",
-      //         style: textFieldStyle(
-      //             fontSize: 19.sp,
-      //             color: const Color(0xff071245),
-      //             weight: FontWeight.w600))
-      //     : ListView.builder(
-      //         shrinkWrap: true,
-      //         controller: ScrollController(keepScrollOffset: false),
-      //         itemCount: filterCustomerList.length,
-      //         itemBuilder: (context, index) {
-      //           return customListView(
-      //               context, filterCustomerList[index]);
-      //         },
-      //       )
-    ],
-  );
+        // filterCustomerList.isEmpty
+        //     ? Text("Customer list is empty",
+        //         style: textFieldStyle(
+        //             fontSize: 19.sp,
+        //             color: const Color(0xff071245),
+        //             weight: FontWeight.w600))
+        //     : ListView.builder(
+        //         shrinkWrap: true,
+        //         controller: ScrollController(keepScrollOffset: false),
+        //         itemCount: filterCustomerList.length,
+        //         itemBuilder: (context, index) {
+        //           return customListView(
+        //               context, filterCustomerList[index]);
+        //         },
+        //       )
+      ],
+    );
+  }
 }

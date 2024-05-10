@@ -5,6 +5,7 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:provider/provider.dart';
 import 'package:tailor_app/Modals/user_modal.dart';
 import 'package:tailor_app/Providers/home_provider.dart';
+import 'package:tailor_app/Reusable%20components/debouncer.dart';
 import 'package:tailor_app/Reusable%20components/order_item.dart';
 import 'package:tailor_app/Reusable%20components/text_field.dart';
 import 'package:tailor_app/Screens/Home%20screen/%20Add%20Order/add_customer_screen.dart';
@@ -22,6 +23,8 @@ class _OtpScreenState extends State<HomeScreen>
   TextEditingController search = TextEditingController();
   int currentIndexx = 0;
   int tab = 1;
+
+  final _debouncer = Debouncer(milliseconds: 900);
 
   TextEditingController couponCodeController = TextEditingController();
   bool loading = false;
@@ -42,19 +45,20 @@ class _OtpScreenState extends State<HomeScreen>
   }
 
   Future<void> getOrders(int pageIndex) async {
-    print(pageIndex);
     List<OrderModal> orders =
         await Provider.of<HomeProvider>(context, listen: false)
-            .getOrders(page: pageIndex);
+            .getOrders(page: pageIndex, search: search.text);
     if (orders.isNotEmpty) {
       // currentPage = currentPage + 1;
       final isLastPage = orders.length < 30;
       if (isLastPage) {
-        pagingController.appendLastPage(orders ?? []);
+        pagingController.appendLastPage(orders);
       } else {
         final nextPageKey = pageIndex + 1;
         pagingController.appendPage(orders, nextPageKey);
       }
+    } else {
+      pagingController.appendLastPage(orders);
     }
     loading = false;
   }
@@ -62,10 +66,6 @@ class _OtpScreenState extends State<HomeScreen>
   @override
   void dispose() {
     super.dispose();
-  }
-
-  void refresh() {
-    print("object");
   }
 
   @override
@@ -190,7 +190,11 @@ class _OtpScreenState extends State<HomeScreen>
           child: CustomTextField(
               prefixIcon: true,
               controller: search,
-              onChanged: (value) {},
+              onChanged: (value) {
+                _debouncer.run(() {
+                  pagingController.refresh();
+                });
+              },
               margin: false,
               hintText: "Search..."),
         ),
