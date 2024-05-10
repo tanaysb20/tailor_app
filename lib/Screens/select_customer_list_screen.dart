@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:tailor_app/Modals/customer_modal.dart';
 import 'package:tailor_app/Providers/home_provider.dart';
 import 'package:tailor_app/Reusable%20components/customer_item.dart';
+import 'package:tailor_app/Reusable%20components/debouncer.dart';
 import 'package:tailor_app/Reusable%20components/text_field.dart';
 
 class SelectCustomerListScreen extends StatefulWidget {
@@ -25,8 +26,10 @@ class _OtpScreenState extends State<SelectCustomerListScreen>
 
   DateTime? selectedDate;
   bool loading = false;
+  final _debouncer = Debouncer(milliseconds: 900);
 
   List<CustomerModal> filterCustomerList = [];
+  TextEditingController search = TextEditingController();
   final PagingController<int, CustomerModal> pagingController =
       PagingController(firstPageKey: 1);
 
@@ -41,18 +44,20 @@ class _OtpScreenState extends State<SelectCustomerListScreen>
   }
 
   Future start(int pageIndex) async {
-    List<CustomerModal> orders =
+    List<CustomerModal> customers =
         await Provider.of<HomeProvider>(context, listen: false)
-            .getCustomer(page: pageIndex);
-    if (orders.isNotEmpty) {
+            .getCustomer(page: pageIndex, search: search.text);
+    if (customers.isNotEmpty) {
       // currentPage = currentPage + 1;
-      final isLastPage = orders.length < 30;
+      final isLastPage = customers.length < 30;
       if (isLastPage) {
-        pagingController.appendLastPage(orders ?? []);
+        pagingController.appendLastPage(customers ?? []);
       } else {
         final nextPageKey = pageIndex + 1;
-        pagingController.appendPage(orders, nextPageKey);
+        pagingController.appendPage(customers, nextPageKey);
       }
+    } else {
+      pagingController.appendLastPage(customers ?? []);
     }
     loading = false;
   }
@@ -88,7 +93,12 @@ class _OtpScreenState extends State<SelectCustomerListScreen>
                 titleSpacing: 20.w,
                 centerTitle: false,
                 title: Row(children: [
-                  Icon(Icons.arrow_back, color: Color(0xffFF7126), size: 20.sp),
+                  InkWell(
+                      onTap: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Icon(Icons.arrow_back,
+                          color: Color(0xffFF7126), size: 20.sp)),
                   SizedBox(width: 8.w),
                   Text(
                     "Select Existing Customer",
@@ -102,117 +112,123 @@ class _OtpScreenState extends State<SelectCustomerListScreen>
             body: PagedListView<int, CustomerModal>(
               pagingController: pagingController,
               builderDelegate: PagedChildBuilderDelegate<CustomerModal>(
-                  itemBuilder: (context, item, index) {
-                    print(index);
-                    return Column(
-                      children: [
-                        if (index == 0) bodyWidget(context),
-                        CustomerItem(
-                          orderItem: item,
-                          onTapx: () {
-                            Navigator.pop(context, item);
-                          },
-                        ),
-                      ],
-                    );
-                  },
-                  firstPageProgressIndicatorBuilder: (_) => Column(
-                        children: [
-                          bodyWidget(context),
-                          Container(
-                            height: 200,
-                            child: Center(
-                              child: CircularProgressIndicator(),
-                            ),
-                          )
-                        ],
+                itemBuilder: (context, item, index) {
+                  print(index);
+                  return Column(
+                    children: [
+                      if (index == 0) bodyWidget(context),
+                      CustomerItem(
+                        orderItem: item,
+                        onTapx: () {
+                          Navigator.pop(context, item);
+                        },
                       ),
-                  noItemsFoundIndicatorBuilder: (_) => Column(
-                        children: [bodyWidget(context)],
+                    ],
+                  );
+                },
+                firstPageProgressIndicatorBuilder: (_) => Column(
+                  children: [
+                    bodyWidget(context),
+                    Container(
+                      height: 200,
+                      child: Center(
+                        child: CircularProgressIndicator(),
                       ),
-                  newPageProgressIndicatorBuilder: (_) => Column(
-                        children: [
-                          Center(
-                            child: CircularProgressIndicator(),
-                          )
-                        ],
-                      )),
+                    )
+                  ],
+                ),
+                noItemsFoundIndicatorBuilder: (_) => Column(
+                  children: [bodyWidget(context)],
+                ),
+                newPageProgressIndicatorBuilder: (_) => Column(
+                  children: [
+                    Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  ],
+                ),
+              ),
             ),
           );
   }
-}
 
-Widget customListView(BuildContext context, CustomerModal itemFile) {
-  return InkWell(
-    onTap: () async {
-      //
-    },
-    child: Column(
-      children: [
-        ListTile(
-          leading: CircleAvatar(
-              child: SvgPicture.asset("assets/pic.svg"), radius: 26.sp),
-          title: Text("${itemFile.name}",
-              style: textFieldStyle(
-                  fontSize: 19.sp,
-                  color: const Color(0xff071245),
-                  weight: FontWeight.w600)),
-          subtitle: Container(
-            margin: EdgeInsets.only(top: 6.h),
-            child: Text("+91 ${itemFile.phone_no}",
+  Widget customListView(BuildContext context, CustomerModal itemFile) {
+    return InkWell(
+      onTap: () async {
+        //
+      },
+      child: Column(
+        children: [
+          ListTile(
+            leading: CircleAvatar(
+                child: SvgPicture.asset("assets/pic.svg"), radius: 26.sp),
+            title: Text("${itemFile.name}",
                 style: textFieldStyle(
-                  fontSize: 17.sp,
-                  color: Colors.grey.shade600,
-                )),
+                    fontSize: 19.sp,
+                    color: const Color(0xff071245),
+                    weight: FontWeight.w600)),
+            subtitle: Container(
+              margin: EdgeInsets.only(top: 6.h),
+              child: Text("+91 ${itemFile.phone_no}",
+                  style: textFieldStyle(
+                    fontSize: 17.sp,
+                    color: Colors.grey.shade600,
+                  )),
+            ),
           ),
-        ),
-        Divider(thickness: 1),
-      ],
-    ),
-  );
-}
-
-Widget bodyWidget(BuildContext context) {
-  final item = Provider.of<HomeProvider>(context, listen: false);
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      SizedBox(height: 30.h),
-      // item.trasactionList.isEmpty?
-      // Padding(
-      //   padding:  EdgeInsets.symmetric(vertical:  150.0.h),
-      //   child: Center(child: Text("No Transaction Yet",
-      //     style: textFieldStyle(
-      //         fontSize: 24.sp,
-      //         color: const Color(0xff112951),
-      //         weight: FontWeight.w800)),),
-      // ):
-
-      Padding(
-        padding: EdgeInsets.symmetric(horizontal: 12.0.w),
-        child: CustomTextField(
-            prefixIcon: true,
-            onChanged: (value) {},
-            margin: false,
-            hintText: "Search by Name or Mobile No."),
+          Divider(thickness: 1),
+        ],
       ),
-      SizedBox(height: 20.h),
+    );
+  }
 
-      // filterCustomerList.isEmpty
-      //     ? Text("Customer list is empty",
-      //         style: textFieldStyle(
-      //             fontSize: 19.sp,
-      //             color: const Color(0xff071245),
-      //             weight: FontWeight.w600))
-      //     : ListView.builder(
-      //         shrinkWrap: true,
-      //         controller: ScrollController(keepScrollOffset: false),
-      //         itemCount: filterCustomerList.length,
-      //         itemBuilder: (context, index) {
-      //           return customListView(
-      //               context, filterCustomerList[index]);
-      //         },
-      //       )
-    ],
-  );
+  Widget bodyWidget(BuildContext context) {
+    final item = Provider.of<HomeProvider>(context, listen: false);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SizedBox(height: 30.h),
+        // item.trasactionList.isEmpty?
+        // Padding(
+        //   padding:  EdgeInsets.symmetric(vertical:  150.0.h),
+        //   child: Center(child: Text("No Transaction Yet",
+        //     style: textFieldStyle(
+        //         fontSize: 24.sp,
+        //         color: const Color(0xff112951),
+        //         weight: FontWeight.w800)),),
+        // ):
+
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 12.0.w),
+          child: CustomTextField(
+              prefixIcon: true,
+              controller: search,
+              onChanged: (value) {
+                _debouncer.run(() {
+                  pagingController.refresh();
+                });
+              },
+              margin: false,
+              hintText: "Search by Name or Mobile No."),
+        ),
+        SizedBox(height: 20.h),
+
+        // filterCustomerList.isEmpty
+        //     ? Text("Customer list is empty",
+        //         style: textFieldStyle(
+        //             fontSize: 19.sp,
+        //             color: const Color(0xff071245),
+        //             weight: FontWeight.w600))
+        //     : ListView.builder(
+        //         shrinkWrap: true,
+        //         controller: ScrollController(keepScrollOffset: false),
+        //         itemCount: filterCustomerList.length,
+        //         itemBuilder: (context, index) {
+        //           return customListView(
+        //               context, filterCustomerList[index]);
+        //         },
+        //       )
+      ],
+    );
+  }
 }

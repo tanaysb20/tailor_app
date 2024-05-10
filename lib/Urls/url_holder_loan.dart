@@ -3,6 +3,7 @@ class UrlHolder {
 
   static const login = "login";
   static const orderList = "order/list";
+  static const filterOrderList = "order/filter-order";
   static const customerList = "customer/list";
   static const productList = "product/list";
   static const cityList = "get-city";

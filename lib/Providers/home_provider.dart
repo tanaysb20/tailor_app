@@ -38,125 +38,148 @@ class HomeProvider with ChangeNotifier {
   List<AddOrderModal> addOrderItemList = [];
 
   Future<List<OrderModal>> getOrders(
-      {int pageCount = 30, required int page}) async {
-    final prefs = await SharedPreferences.getInstance();
-    var _accessToken = await prefs.getString("userToken");
+      {int pageCount = 30,
+      required int page,
+      String search = "",
+      String? filter}) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      var _accessToken = await prefs.getString("userToken");
 
-    var headers = {'Authorization': 'Bearer $_accessToken'};
-    var request = Request('GET',
-        Uri.parse('${UrlHolder.baseUrl}${UrlHolder.orderList}?page=${page}'));
+      var headers = {'Authorization': 'Bearer $_accessToken'};
+      var request = Request(
+          'GET',
+          Uri.parse(
+              '${UrlHolder.baseUrl}${UrlHolder.orderList}?page=${page}&search=$search'));
+      if (filter != null && "123".contains(filter)) {
+        request = Request(
+            'POST',
+            Uri.parse(
+                '${UrlHolder.baseUrl}${UrlHolder.filterOrderList}?page=${page}&search=$search'));
+        request.body = (json.encode({"status": filter}));
+      }
 
-    request.headers.addAll(headers);
+      request.headers.addAll(headers);
 
-    StreamedResponse response = await request.send();
+      StreamedResponse response = await request.send();
 
-    List<OrderModal> demoOrderList = [];
+      List<OrderModal> demoOrderList = [];
 
-    if (response.statusCode == 200) {
-      final xyz = await response.stream.bytesToString();
+      if (response.statusCode == 200) {
+        final xyz = await response.stream.bytesToString();
 
-      final List responseData = json.decode(xyz)["data"];
+        final List responseData = json.decode(xyz)["data"];
 
-      responseData.forEach((element) {
-        return demoOrderList.add(OrderModal(
-          id: element["id"].toString(),
-          address: element["address"] ?? "",
-          bill_no: element["bill_no"] ?? "",
-          cust_name: element["cust_name"] ?? "",
-          mobile_no: element["mobile_no"] ?? "",
-          city_id: element["city_id"] ?? "",
-          created_at: element["created_at"] ?? "",
-          cust_id: element["cust_id"] ?? "",
-          order_no: element["order_no"] ?? "",
-          sales_name: element["sales_name"] ?? "",
-          status: element["status"] ?? "",
-        ));
-      });
-      return demoOrderList;
-      // notifyListeners();
-    } else {
-      print(response.reasonPhrase);
+        responseData.forEach((element) {
+          return demoOrderList.add(OrderModal(
+            id: element["id"].toString(),
+            address: element["address"] ?? "",
+            bill_no: element["bill_no"] ?? "",
+            cust_name: element["cust_name"] ?? "",
+            mobile_no: element["mobile_no"] ?? "",
+            city_id: element["city_id"] ?? "",
+            created_at: element["created_at"] ?? "",
+            cust_id: element["cust_id"] ?? "",
+            order_no: element["order_no"] ?? "",
+            sales_name: element["sales_name"] ?? "",
+            status: element["status"] ?? "",
+          ));
+        });
+        return demoOrderList;
+        // notifyListeners();
+      } else {
+        print(response.reasonPhrase);
+        return [];
+      }
+    } catch (e) {
       return [];
     }
   }
 
   Future<List<CustomerModal>> getCustomer(
-      {int pageCount = 30, required int page}) async {
-    log("$page");
-    final prefs = await SharedPreferences.getInstance();
-    var _accessToken = await prefs.getString("userToken");
-    var headers = {'Authorization': 'Bearer $_accessToken'};
+      {int pageCount = 30, required int page, String search = ""}) async {
+    try {
+      log("$page");
+      final prefs = await SharedPreferences.getInstance();
+      var _accessToken = await prefs.getString("userToken");
+      var headers = {'Authorization': 'Bearer $_accessToken'};
 
-    var request = Request('GET',
-        Uri.parse('${UrlHolder.baseUrl}${UrlHolder.customerList}?page=$page'));
+      var request = Request(
+          'GET',
+          Uri.parse(
+              '${UrlHolder.baseUrl}${UrlHolder.customerList}?page=$page&search=$search'));
 
-    request.headers.addAll(headers);
+      request.headers.addAll(headers);
 
-    StreamedResponse response = await request.send();
-    List<CustomerModal> demoCustomerList = [];
+      StreamedResponse response = await request.send();
+      List<CustomerModal> demoCustomerList = [];
 
-    if (response.statusCode == 200) {
-      final xyz = await response.stream.bytesToString();
+      if (response.statusCode == 200) {
+        final xyz = await response.stream.bytesToString();
 
-      final List responseData = json.decode(xyz)["data"];
-      final txlastPage = json.decode(xyz)["last_page"];
+        final List responseData = json.decode(xyz)["data"];
+        final txlastPage = json.decode(xyz)["last_page"];
 
-      responseData.forEach((element) {
-        return demoCustomerList.add(CustomerModal(
-          id: element["id"].toString(),
-          address: element["address"] ?? "",
-          city_id: element["city_id"] ?? "",
-          created_at: element["created_at"] ?? "",
-          avtar: element["avtar"] ?? "",
-          cityname: element["city"]["city"],
-          name: element["name"] ?? "",
-          order_count: element["order_count"] ?? "",
-          phone_no: element["phone_no"] ?? "",
-        ));
-      });
-      customerList = demoCustomerList;
-      lastPage = txlastPage;
+        responseData.forEach((element) {
+          return demoCustomerList.add(CustomerModal(
+            id: element["id"].toString(),
+            address: element["address"] ?? "",
+            city_id: element["city_id"] ?? "",
+            created_at: element["created_at"] ?? "",
+            avtar: element["avtar"] ?? "",
+            cityname: element["city"]["city"],
+            name: element["name"] ?? "",
+            order_count: element["order_count"] ?? "",
+            phone_no: element["phone_no"] ?? "",
+          ));
+        });
+        customerList = demoCustomerList;
+        lastPage = txlastPage;
 
-      notifyListeners();
-      return customerList;
-    } else {
-      print(response.reasonPhrase);
-      return customerList;
+        notifyListeners();
+        return customerList;
+      } else {
+        print(response.reasonPhrase);
+        return customerList;
+      }
+
+      // var request = Request(
+      //     'GET', Uri.parse('${UrlHolder.baseUrl}${UrlHolder.customerList}'));
+
+      // request.headers.addAll(headers);
+
+      // List<CustomerModal> demoCustomerList = [];
+
+      // StreamedResponse response = await request.send();
+
+      // if (response.statusCode == 200) {
+      //   final xyz = await response.stream.bytesToString();
+
+      //   final List responseData = json.decode(xyz)["data"];
+
+      //   responseData.forEach((element) {
+      //     return demoCustomerList.add(CustomerModal(
+      //       id: element["id"].toString(),
+      //       address: element["address"] ?? "",
+      //       city_id: element["city_id"] ?? "",
+      //       created_at: element["created_at"] ?? "",
+      //       avtar: element["avtar"] ?? "",
+      //       city: element["city"]["city"] ?? "",
+      //       name: element["name"] ?? "",
+      //       order_count: element["order_count"] ?? "",
+      //       phone_no: element["phone_no"] ?? "",
+      //     ));
+      //   });
+      //   customerList = demoCustomerList;
+
+      //   notifyListeners();
+      // } else {
+      //   print(response.reasonPhrase);
+      // }}
+    } catch (e) {
+      print(e);
+      return [];
     }
-
-    // var request = Request(
-    //     'GET', Uri.parse('${UrlHolder.baseUrl}${UrlHolder.customerList}'));
-
-    // request.headers.addAll(headers);
-
-    // List<CustomerModal> demoCustomerList = [];
-
-    // StreamedResponse response = await request.send();
-
-    // if (response.statusCode == 200) {
-    //   final xyz = await response.stream.bytesToString();
-
-    //   final List responseData = json.decode(xyz)["data"];
-
-    //   responseData.forEach((element) {
-    //     return demoCustomerList.add(CustomerModal(
-    //       id: element["id"].toString(),
-    //       address: element["address"] ?? "",
-    //       city_id: element["city_id"] ?? "",
-    //       created_at: element["created_at"] ?? "",
-    //       avtar: element["avtar"] ?? "",
-    //       city: element["city"]["city"] ?? "",
-    //       name: element["name"] ?? "",
-    //       order_count: element["order_count"] ?? "",
-    //       phone_no: element["phone_no"] ?? "",
-    //     ));
-    //   });
-    //   customerList = demoCustomerList;
-
-    //   notifyListeners();
-    // } else {
-    //   print(response.reasonPhrase);
-    // }
   }
 
   Future getProductList() async {
