@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tailor_app/Providers/home_provider.dart';
@@ -23,6 +24,7 @@ class _OtpScreenState extends State<LandingScreen>
   int tab = 1;
   TabController? _tabController;
   bool loading = false;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -31,15 +33,11 @@ class _OtpScreenState extends State<LandingScreen>
     setState(() {
       loading = true;
     });
-    Provider.of<HomeProvider>(context, listen: false)
-        .getOrders()
-        .then((value) =>
-            Provider.of<HomeProvider>(context, listen: false).getCounts())
-        .then((value) =>
-            Provider.of<HomeProvider>(context, listen: false).getCity())
-        .then((value) {
-      Provider.of<HomeProvider>(context, listen: false).getProductList();
-    }).then((value) {
+
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      await Provider.of<HomeProvider>(context, listen: false).getCounts();
+      await Provider.of<HomeProvider>(context, listen: false).getCity();
+      await Provider.of<HomeProvider>(context, listen: false).getProductList();
       setState(() {
         loading = false;
       });

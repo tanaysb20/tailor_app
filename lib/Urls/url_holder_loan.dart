@@ -11,4 +11,6 @@ class UrlHolder {
   static const getCount = "get-total";
   static const itemDetail = "order/item/detail";
   static const patternFilter = "order/product-pattern";
+  static const orderAdd = "order/add";
+  static const addOrderItem = "order/item";
 }
